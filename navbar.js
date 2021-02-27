@@ -13,7 +13,7 @@ var isWidthChanged=false, isOptionsClicked=false;
 
 
 options.className="options";
-options.src="options.png";
+options.src="options.jpg";
 
 function widthChangeEffect(x){
 	if (x.matches){
