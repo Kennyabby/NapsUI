@@ -72,6 +72,7 @@ options.addEventListener("click", function(){
 
 		tops.style.display="none";
 		navbar.style.display="inline-block";
+		nav[0].style.backgroundColor="rgba(2,2,2,0.8)"
 		navbar.style.width="100%";
 
 		navbar.appendChild(home);
@@ -82,6 +83,7 @@ options.addEventListener("click", function(){
 
 	}else {
 		tops.style.display="block";
+		nav[0].style.backgroundColor="22222233"
 		backToDefault();
 	}
 });
