@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="HTML, JAVASCRIPT, CSS, PHP">
+    <meta name="generator" content="Jekyll v4.1.1">
+	<title>Sign Up | Register</title>
+	<link rel="stylesheet" type="text/css" href="signup.css">
+</head>
+<body>
+	<p class="head">Registeration Platform (Naps UI)</p>
+	<div class="cover">
+		<ul class="stages">
+			<li>
+				<h1 class="proccess active" id="basic"> Basic-Info</h1>
+			</li>
+			<li>
+				<h1 class="proccess" id="school">School-Info</h1>
+			</li>
+			<li>
+				<h1 class="proccess" id="cont">Contact-Address</h1>
+			</li>
+			<li>
+				<h1 class="proccess" id="signin">Sign in-Info</h1>
+			</li>
+			<li>
+				<h1 class="proccess" id="finil">Finish</h1>
+			</li>
+		</ul>
+		
+		<div id="basic-info" name="info">
+
+			<div id="basic-1" name="basic">
+
+				<img class="mb-4" src="user.png" id="user">
+				
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="First Name" placeholder="First Name" id="inputFirstName" required autofocus>
+				</p>
+				<p>	
+					<input class="inputs"type="text" name="Middle Name" placeholder="Middle Name" id="inputMiddleName">
+				</p>
+				<p>	
+					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Last Name" placeholder="Last Name" id="inputLastName" required>
+				</p>
+				<p>
+					<label class="radio">
+						Male <input class="gender" id="male" type="radio" name="Gender" value="Male">
+					</label>
+					<label class="radio">
+						Female <input class="gender" id="female" type="radio" name="Gender" value="Female">
+					</label>
+					<label class="radio">
+						Undecided <input class="gender" id="others" type="radio" name="Gender" value="Undecided" checked="true">
+					</label>
+				</p>	
+
+			</div>
+
+			<div id="basic-2" name="basic">
+
+				<img class="mb-4" src="user.png" id="user">
+
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs" type="dropdown" name="Parent/ Guardian Name" placeholder="Parent/ Guardian Name" id="inputParentName" required autofocus>
+				</p>
+
+				<p>
+					<span style="color:red; margin-right:5px;">*</span><label for="birthday">Date of Birth</label>
+				</p>
+
+				<p><input type="date" name="Date of Birth" id="inputBirthday"></p>
+
+			</div>
+			
+		</div>
+		<div id="school-info" name="info">
+
+			<div id="school-1" name="school">
+				
+				<img class="mb-4" src="user.png" id="user">
+
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Matric No" placeholder="Matric No" id="inputMatricNo" required autofocus>
+				</p>
+
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="email" name="School Email" placeholder="School Email Address" id="inputSchoolEmail" required>
+				</p>
+
+				<p>	
+					<input class="inputs input-bottom"type="email" name=" Other Email" placeholder="Other Email Address" id="inputEmail">
+				</p>
+				
+			</div>
+
+			<div id="school-2" name="school">
+				
+				<img class="mb-4" src="user.png" id="user">
+
+				<p>
+					<span style="color:red; margin-right:5px;">*</span><label>Level</label>
+				</p>
+
+				<p>	
+					<select class="inputs input-tops"type="text" name="Level" placeholder="Level" id="inputLevel" required>
+				</select>
+				</p>
+
+				<p>
+					<span style="color:red; margin-right:5px;">*</span><label>Allocated Hall</label>
+				</p>
+
+				<p>	
+					<select class="inputs input-bottom"type="text" name="Hall Allocated" placeholder="Allocated Hall" id="inputHall" required>
+				</select>
+				</p>
+
+			</div>
+			
+		</div>
+
+		<div id="cont-info" name="info">
+			
+			<div id="cont-1" name="cont">
+				
+				<img class="mb-4" src="user.png" id="user">
+				
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Contact Number" placeholder="Contact Number" id="inputContact" required autofocus>
+				</p>
+				<p>	
+					<input class="inputs"type="text" name="Other Contact Number" placeholder="Other Contact number" id="inputOtherContact">
+				</p>
+				<p>	
+					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Current Address" placeholder="Current Address" id="inputAddress" required>
+				</p>
+				
+			</div>
+
+			<div id="cont-2" name="cont">
+				
+				<img class="mb-4" src="user.png" id="user">
+				
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Parent/ Guardian Contact" placeholder="Parent/ Guardian Contact" id="inputParentContact" required autofocus>
+				</p>
+				<p>	
+					<input class="inputs"type="text" name="Parent/ Guardian Other Contact" placeholder="Other Contact" id="inputParentOtherContact">
+				</p>
+				<p>	
+					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Parent/ Guardian Address" placeholder=" Parent/ Guardian Address" id="inputParentAddress" required>
+				</p>
+				
+			</div>
+		</div>
+
+		<div id="signin-info" name="info">
+			
+			<div id="signin-1" name="signin">
+
+				<img class="mb-4" src="user.png" id="user">
+				
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="User Name" placeholder="User Name" id="inputUserName" required autofocus>
+				</p>
+
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="password" name="Password" placeholder="Password" id="inputPassword" required>
+				</p>
+
+				<p>	
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-bottom"type="password" name="Confirm Password" placeholder="Confirm Password" id="inputConfirmPassword" required>
+				</p>
+
+			</div>
+		</div>
+
+		<div id="finil-info" name="info">
+			
+			<div id="finil-1" name="finil">
+				
+				<div id="pic-info">
+				<img id="picture-cover" src="profile-pic.jpg">
+				</div>
+				<p><button id="upload-pic">Upload Profile Picture</button></p>
+
+			</div>
+		</div>
+
+		<div class="pos-val" name="pos-val">
+			<button id="back">Prev</button> 
+			<button id="next">Next</button>
+			<button id="save">Save</button>
+			<button id="finish">Finish</button>
+			<button id="submit">Submit</button>
+		</div>
+
+		<div id="current">
+			
+
+		</div>
+	
+	</div>
+	<script type="text/javascript" src="reg.js"></script>
+</body>
+</html>
