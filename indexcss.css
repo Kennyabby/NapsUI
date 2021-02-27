@@ -36,7 +36,7 @@ body {
 
 .options{
 
-  src: url("options.png");
+  src: url("options.jpg");
   width: 45px;
   height: 45px;
   margin: 10px;
@@ -45,7 +45,7 @@ body {
   background-color:#ffffffff;
   border-radius: 7px;
   box-shadow: 4px 4px 5px black;
-  border: solid #ffffff66 3px;
+  border: solid #ffffff66 1px;
 
 }
 
