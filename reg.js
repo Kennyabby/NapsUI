@@ -126,7 +126,7 @@ function removePrevUserData(){
 
 
  	
-function infosChildList(){
+const infosChildList= () => {
 	var infosChildId=infosList[infosCount].id;
 	var infosChildList = document.getElementsByName((infosChildId).slice(0,infosChildId.indexOf("-")));
 	return infosChildList;
