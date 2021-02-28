@@ -83,7 +83,7 @@ options.addEventListener("click", function(){
 
 	}else {
 		tops.style.display="block";
-		nav[0].style.backgroundColor="22222233"
+		nav[0].style.backgroundColor="#22222233"
 		backToDefault();
 	}
 });
