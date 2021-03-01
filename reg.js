@@ -1,3 +1,6 @@
+// napsite
+// Napsite@21
+// mongodb+srv://napsite:<password>@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 var inputFirstName = document.getElementById("inputFirstName");
 var inputMiddleName = document.getElementById("inputMiddleName");
