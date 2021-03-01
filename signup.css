@@ -150,6 +150,25 @@ body {
   border-bottom: solid #ff4444ff 3px;
 }
 
+.input-tooltip{
+  font-size: .8rem;
+  position: relative;
+  display: flex;
+  visibility: visible;
+  background-color: rgba(0,0,0,0.8 );
+  color: #f22;
+  text-align:  center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  margin-top: -10px;
+  border-width: solid;
+  opacity: 1;
+  transition: opacity 0.3s;
+
+}
+
 #picture-cover{
 
 
@@ -157,7 +176,6 @@ body {
   width: 80px;
   margin:0px;
   flex-wrap: wrap;
-  
   align-self: center;
   text-align: center;
   border-radius: 55px;
@@ -171,6 +189,7 @@ body {
   font-size: .9rem;
   font-weight: bold;
   color: #ffffffff;
+  /*text-align: center;*/
   border: solid blue 2px;
   outline: none;
   padding: 10px;

@@ -38,7 +38,11 @@ var signinLabel = document.getElementById("signin");
 var finilLabel = document.getElementById("finil");
 var firstClicked=true, middleClicked=false, lastClicked=false;
 var inputClicked=-1, windowClicked=0;
-
+var verifiedList=[];
+var basicCompleted=false, schoolCompleted=false, contCompleted=false, signinCompleted=false;
+var proceedToNext=false;
+var password="";
+var cpassword="";
 var current = document.getElementById("current");
 var currentList = [];
 var posVal = document.getElementsByName("pos-val");
@@ -163,6 +167,9 @@ function addInputsFocusListener(){
 addInputsFocusListener();
 focus(inputFirstName);
 
+// var option = document.createElement("option");
+// option.appendChild(document.createTextNode(""));
+// inputLevel.appendChild(option);
 for(var i=0; i<7; i++){
 
 	var option = document.createElement("option");
@@ -327,6 +334,75 @@ function labelUpdate(label){
 	label.style.borderBottom="solid #ff4444ff 3px";
 };
 
+function validateInputs(){
+	
+	verifiedList=[];
+	var proceedCount=0;
+	var inputParent = infosList[infosCount].children[count].querySelectorAll("input");
+	inputParent.forEach(function(input){
+		if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
+			
+			if (input.value.length>0){
+				++proceedCount;
+				if (input===inputPassword){
+					password=inputPassword.value;
+				}else if(input===inputConfirmPassword){
+					cpassword=inputConfirmPassword.value;
+				}
+				
+			}
+			verifiedList = verifiedList.concat(input);
+		}
+	})
+
+	if (proceedCount===verifiedList.length){
+		
+		proceedToNext=true;
+		
+	}
+	else{
+		proceedToNext=false;
+	}
+
+}
+
+function monitorInput(input,parent){
+
+	var infosChildId = input.parentElement.parentElement.id;
+	var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+	var toolTip = document.getElementById(input.id+"Tip");
+	
+	if (infosTag===parent){
+		
+		if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
+
+			if (input.value.length===0){
+
+				input.style.border="solid rgb(255,0,0) 2px";
+				toolTip.innerHTML=input.title;
+			}
+			else{
+				input.style.border="solid #1111ff99 2px";
+				toolTip.innerHTML="";
+			}
+		}	
+	}
+}
+function createInputEvents(){
+
+	inputList.forEach(function(input){
+
+		input.addEventListener("input", function(){
+			var infosChildId=infosList[infosCount].id;
+			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+			monitorInput(input,infosTag);
+			
+		});
+	});
+}
+
+createInputEvents();
+
 basicLabel.addEventListener("click", function(){
 
 	count=0;
@@ -339,6 +415,7 @@ schoolLabel.addEventListener("click", function(){
 	count=0;
 	infosCount=1;
 	update(infosList[infosCount],infosChildList(), count);
+	
 });
 
 contLabel.addEventListener("click", function(){
@@ -356,17 +433,42 @@ signinLabel.addEventListener("click", function(){
 });
 
 finilLabel.addEventListener("click", function(){
-	++rewriteData;
-	count=0;
-	infosCount=4;
-	update(infosList[infosCount],infosChildList(), count);
+
+	validateInputs();
+	if (proceedToNext===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
+		++rewriteData;
+		count=0;
+		infosCount=4;
+		update(infosList[infosCount],infosChildList(), count);
+	}
+	else{
+		verifiedList.forEach(function(input){
+			var infosChildId=infosList[infosCount].id;
+			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+			monitorInput(input,infosTag);
+		})
+		
+	}
+
 });
 
 next.addEventListener("click", function(){
 
-	isPageActive=true;
-	++count;
-	updateRegTo(infosList[infosCount],infosChildList(),count);
+	validateInputs();
+	if (proceedToNext===true){
+		isPageActive=true;
+		++count;
+		updateRegTo(infosList[infosCount],infosChildList(),count);	
+	}
+	else{
+		verifiedList.forEach(function(input){
+			var infosChildId=infosList[infosCount].id;
+			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+			monitorInput(input,infosTag);
+		})
+		
+	}
+	
 
 });
 back.addEventListener("click", function(){
@@ -385,21 +487,70 @@ back.addEventListener("click", function(){
 
 });
 
+function checkCompletedInfo(count){
+
+	if (count===0){
+		basicCompleted=true;
+	}else if (count===1){
+		schoolCompleted=true;
+	}else if (count===2){
+		contCompleted=true;
+	}else if (count===4){
+
+	}
+}
+
 save.addEventListener("click", function(){
 
-	count=0;
-	++infosCount;
-	isPageSlide=true;
-	update(infosList[infosCount],infosChildList(), count);
+	validateInputs();
+	if (proceedToNext===true){
+		count=0;
+		checkCompletedInfo(infosCount);
+		++infosCount;
+		isPageSlide=true;
+		update(infosList[infosCount],infosChildList(), count);
+	}
+	else{
+		verifiedList.forEach(function(input){
+			var infosChildId=infosList[infosCount].id;
+			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+			monitorInput(input,infosTag);
+		})
+		
+	}
+	
 
 });
 finish.addEventListener("click", function(){
 
-	++rewriteData;
-	count=0;
-	++infosCount;
-	isPageSlide=true;
-	update(infosList[infosCount],infosChildList(), count);
+	validateInputs();
+	if (proceedToNext===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
+		var inpt = document.getElementById("inputConfirmPasswordTip");
+		if (password!==cpassword){
+			
+			inpt.style.border="solid rgb(255,0,0) 2px"; 
+			inpt.innerHTML="Passwords Do Not Match!";
+		}
+		else{
+			inpt.style.border="solid #1111ff99 2px";
+			++rewriteData;
+			count=0;
+			++infosCount;
+			isPageSlide=true;
+			update(infosList[infosCount],infosChildList(), count);	
+		}
+		
+	}
+	else{
+
+		verifiedList.forEach(function(input){
+			var infosChildId=infosList[infosCount].id;
+			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+			monitorInput(input,infosTag);
+		})
+		
+	}
+	
 
 });
 submit.addEventListener("click", function(){

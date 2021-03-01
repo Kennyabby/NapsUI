@@ -37,13 +37,14 @@
 				<img class="mb-4" src="user.png" id="user">
 				
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="First Name" placeholder="First Name" id="inputFirstName" required autofocus>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="First Name" placeholder="First Name" id="inputFirstName" title="Please Enter Your First Name" required autofocus><span class="input-tooltip" id="inputFirstNameTip"></span>
+
 				</p>
 				<p>	
 					<input class="inputs"type="text" name="Middle Name" placeholder="Middle Name" id="inputMiddleName">
 				</p>
 				<p>	
-					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Last Name" placeholder="Last Name" id="inputLastName" required>
+					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Last Name" placeholder="Last Name" id="inputLastName" title="Please Enter Your Last Name" required><span class="input-tooltip" id="inputLastNameTip"></span>
 				</p>
 				<p>
 					<label class="radio">
@@ -64,14 +65,14 @@
 				<img class="mb-4" src="user.png" id="user">
 
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs" type="dropdown" name="Parent/ Guardian Name" placeholder="Parent/ Guardian Name" id="inputParentName" required autofocus>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs" type="dropdown" name="Parent/ Guardian Name" placeholder="Parent/ Guardian Name" id="inputParentName" title="Please Enter Your Parent/ Guardian Name" required autofocus><span class="input-tooltip" id="inputParentNameTip"></span>
 				</p>
 
 				<p>
 					<span style="color:red; margin-right:5px;">*</span><label for="birthday">Date of Birth</label>
 				</p>
 
-				<p><input type="date" name="Date of Birth" id="inputBirthday"></p>
+				<p><input type="date" name="Date of Birth" id="inputBirthday" title="Please Select Your Date of Birth" required></p><span class="input-tooltip" id="inputBirthdayTip"></span>
 
 			</div>
 			
@@ -83,11 +84,11 @@
 				<img class="mb-4" src="user.png" id="user">
 
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Matric No" placeholder="Matric No" id="inputMatricNo" required autofocus>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Matric No" placeholder="Matric No" id="inputMatricNo" title="Please Enter Your Matric Number" required autofocus><span class="input-tooltip" id="inputMatricNoTip"></span>
 				</p>
 
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="email" name="School Email" placeholder="School Email Address" id="inputSchoolEmail" required>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="email" name="School Email" placeholder="School Email Address" id="inputSchoolEmail"  title="Please Enter Your School Email Address" required><span class="input-tooltip" id="inputSchoolEmailTip"></span>
 				</p>
 
 				<p>	
@@ -105,7 +106,7 @@
 				</p>
 
 				<p>	
-					<select class="inputs input-tops"type="text" name="Level" placeholder="Level" id="inputLevel" required>
+					<select class="inputs input-tops"type="text" name="Level" placeholder="Level" id="inputLevel" title="Please Select Your Level" required><span class="input-tooltip" id="inputLevelTip"></span>
 				</select>
 				</p>
 
@@ -114,7 +115,7 @@
 				</p>
 
 				<p>	
-					<select class="inputs input-bottom"type="text" name="Hall Allocated" placeholder="Allocated Hall" id="inputHall" required>
+					<select class="inputs input-bottom"type="text" name="Hall Allocated" placeholder="Allocated Hall" id="inputHall" title="Please Select Your Hall" required><span class="input-tooltip" id="inputHallTip"></span>
 				</select>
 				</p>
 
@@ -129,13 +130,13 @@
 				<img class="mb-4" src="user.png" id="user">
 				
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Contact Number" placeholder="Contact Number" id="inputContact" required autofocus>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Contact Number" placeholder="Contact Number" id="inputContact" title="Please Enter Your Contact Number" required autofocus><span class="input-tooltip" id="inputContactTip"></span>
 				</p>
 				<p>	
 					<input class="inputs"type="text" name="Other Contact Number" placeholder="Other Contact number" id="inputOtherContact">
 				</p>
 				<p>	
-					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Current Address" placeholder="Current Address" id="inputAddress" required>
+					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Current Address" placeholder="Current Address" id="inputAddress" title="Please Enter Your Current Address" required><span class="input-tooltip" id="inputAddressTip"></span>
 				</p>
 				
 			</div>
@@ -145,13 +146,13 @@
 				<img class="mb-4" src="user.png" id="user">
 				
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Parent/ Guardian Contact" placeholder="Parent/ Guardian Contact" id="inputParentContact" required autofocus>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="Parent/ Guardian Contact" placeholder="Parent/ Guardian Contact" id="inputParentContact" title="Please Enter your Parent/ Guardian Contact" required autofocus><span class="input-tooltip" id="inputParentContactTip"></span>
 				</p>
 				<p>	
 					<input class="inputs"type="text" name="Parent/ Guardian Other Contact" placeholder="Other Contact" id="inputParentOtherContact">
 				</p>
 				<p>	
-					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Parent/ Guardian Address" placeholder=" Parent/ Guardian Address" id="inputParentAddress" required>
+					<span style="color:red; margin-right: 5px;">*</span><input class="inputs input-bottom"type="text" name="Parent/ Guardian Address" placeholder=" Parent/ Guardian Address" id="inputParentAddress" title="Please input Parent/ Guardian Address" required><span class="input-tooltip" id="inputParentAddressTip"></span>
 				</p>
 				
 			</div>
@@ -164,15 +165,15 @@
 				<img class="mb-4" src="user.png" id="user">
 				
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="User Name" placeholder="User Name" id="inputUserName" required autofocus>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-tops"type="text" name="User Name" placeholder="User Name" id="inputUserName" title="Please Enter Your UserName" required autofocus><span class="input-tooltip" id="inputUserNameTip"></span>
 				</p>
 
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="password" name="Password" placeholder="Password" id="inputPassword" required>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="password" name="Password" placeholder="Password" id="inputPassword" title="Please Enter your Password" required><span class="input-tooltip" id="inputPasswordTip"></span>
 				</p>
 
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-bottom"type="password" name="Confirm Password" placeholder="Confirm Password" id="inputConfirmPassword" required>
+					<span style="color:red; margin-right:5px;">*</span><input class="inputs input-bottom"type="password" name="Confirm Password" placeholder="Confirm Password" id="inputConfirmPassword" title="Please Enter your Password" required><span class="input-tooltip" id="inputConfirmPasswordTip"></span>
 				</p>
 
 			</div>
