@@ -1,0 +1,41 @@
+{
+  "name": "napsui",
+  "version": "1.0.0",
+  "description": "signup setup",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kennyabby/NapsUI.git"
+  },
+  "author": "Kennyabby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kennyabby/NapsUI/issues"
+  },
+  "homepage": "https://github.com/Kennyabby/NapsUI#readme",
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.8.1",
+    "aws4": "^1.11.0",
+    "body-parser": "^1.19.0",
+    "browserify": "^17.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.4",
+    "mongodb-client-encryption": "^1.2.1",
+    "react": "^17.0.1",
+    "web-vitals": "^1.1.0"
+  },
+  "engines": {
+    "node": "^14.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+  
+}
