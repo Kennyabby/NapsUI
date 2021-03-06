@@ -118,10 +118,10 @@ function displayUserData(){
 			p.className="finil-label";
 			finil.appendChild(p);
 			pList=pList.concat(p);
-			detailsName = detailsName.concat(val.name);
-			detailsValue = detailsValue.concat(val.value);
+			
 		}
-
+		detailsName = detailsName.concat(val.name);
+		detailsValue = detailsValue.concat(val.value);
 		
 	});	
 
@@ -180,7 +180,7 @@ focus(inputFirstName);
 // var option = document.createElement("option");
 // option.appendChild(document.createTextNode(""));
 // inputLevel.appendChild(option);
-for(var i=0; i<7; i++){
+for(var i=0; i<4; i++){
 
 	var option = document.createElement("option");
 	option.appendChild(document.createTextNode((i+1)*100));
@@ -565,64 +565,54 @@ finish.addEventListener("click", function(){
 });
 submit.addEventListener("click", function(){
 
-	count=0;
-	++infosCount;
-	isPageSlide=true;
-	update(infosList[infosCount],infosChildList(), count);
-	// main().catch(console.error);
-
+	// count=0;
+	// ++infosCount;
+	// isPageSlide=true;
+	// update(infosList[infosCount],infosChildList(), count);
+	
+	postToServer();
 });
 
-// async function main(){
 
-// 	const client = new MongoClient(url);
+async function postToServer(){
 
-// 	try {
+	const user = {
+		FirstName: detailsValue[0],
+		MiddleName:detailsValue[1],
+		LastName: detailsValue[2],
+		UserName: detailsValue[3],
+		Gender: detailsValue[4],
+		DateOfBirth:detailsValue[5],
+		Level: detailsValue[6],
+		HallAllocated: detailsValue[7],
+		MatricNo: detailsValue[8],
+		SchoolEmail: detailsValue[9],
+		OtherEmail: detailsValue[10],
+		ContactNumber: detailsValue[11],
+		OtherContactNumber: detailsValue[12],
+		CurrentAddress: detailsValue[13],
+		ParentGuardianName: detailsValue[14],
+		ParentGuardianContact: detailsValue[15],
+		ParentGuardianOtherContact: detailsValue[16],
+		ParentGuardianAddress: detailsValue[17],	
+		Password: detailsValue[18]
+	}
 
-// 		await client.connect();
-// 		const user = {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(user)
+	};
 
-// 			FirstName: detailsValue[0],
-// 			MiddleName:detailsValue[1],
-// 			LastName: detailsValue[2],
-// 			UserName: detailsValue[3],
-// 			Gender: detailsValue[4],
-// 			DateOfBirth:detailsValue[5],
-// 			Level: detailsValue[6],
-// 			HallAllocated: detailsValue[7],
-// 			MatricNo: detailsValue[8],
-// 			SchoolEmail: detailsValue[9],
-// 			OtherEmail: detailsValue[10],
-// 			ContactNumber: detailsValue[11],
-// 			OtherContactNumber: detailsValue[12],
-// 			CurrentAddress: detailsValue[13],
-// 			ParentGuardianName: detailsValue[14],
-// 			ParentGuardianContact: detailsValue[15],
-// 			ParentGuardianOtherContact: detailsValue[16],
-// 			ParentGuardianAddress: detailsValue[17],
-// 		};
-// 		const createdStatus = await createListing(client,user);
-// 		if (createdStatus){
-// 			console.log(`Dear ${user.FirstName} ${user.LastName}, Your Registration is Successfull`);
-// 		}else{
-// 			console.log(`Dear ${user.FirstName} ${user.LastName}, Your Registration is not Successfull`);
-// 		}
-		
-// 	}catch (e){
-// 		console.error(e);
-
-// 	}finally{
-// 		client.close();
-// 	}
-// 	async function createListing(client, newListing){
-// 	    const result = await client.db("napsui").collection("NapsDatabase").insertOne(newListing);
-// 		if (result){
-// 			return true;
-// 		}else{
-// 			return false;
-// 		}		   
-// 	};
-// }
+	const response = await fetch('/Registeration_Status', options);
+	const json = await response.json();	
+	console.log(json.sts);
+};
 
 
 
+
+
+ 
