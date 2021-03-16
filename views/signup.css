@@ -95,13 +95,36 @@ body {
   display: none;
   text-align: center;
   align-content: center;
-  /*flex-wrap : wrap;*/
   text-align: center;
   border-radius: 10px;
   color: #ffffffff;
   margin: 25px;
   margin-top: 150px;
   padding: 0px;
+  border: solid white 1px;
+  box-shadow: 6px 6px 7px black;
+
+}
+
+.regCover{
+
+  background-size: cover;
+  background-color: #333333ff;
+  justify-content: center;
+  display: inline-flex;
+  display: none;
+  text-align: center;
+  align-content: center;
+  text-align: center;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 1rem;
+  color: #ffffffff;
+  margin: 25px;
+  margin-top: 150px;
+  padding: 0px;
+  padding-top: 50px;
+  padding-bottom: 50px;
   border: solid white 1px;
   box-shadow: 6px 6px 7px black;
 

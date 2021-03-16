@@ -5,6 +5,7 @@
 // const {MongoClient} = require('mongodb');
 
 var regCover = document.getElementById("cover");
+var statusCover = document.getElementById("statusCover");
 var information = document.getElementById("information");
 var proceed = document.getElementById("proceed");
 var inputFirstName = document.getElementById("inputFirstName");
@@ -871,20 +872,26 @@ async function postToServer(){
 		body: JSON.stringify(user)
 	};
 
-	const response = await fetch('/Registeration_Status', options);
-	if (response===null){
-		console.log("no response: error 404");
-	}
-	const json = await response.json();	
-	proceedToStatus = json.sts;
+	try{
+		const response = await fetch('/Registeration_Status', options);	
+		const json = await response.json();	
+		proceedToStatus = json.sts;
+		
+		if (proceedToStatus===true){
+
+			regCover.style.display = "none";
+			statusCover.innerHTML= `Dear ${detailsValue[0]} ${detailsValue[1]} ${detailsValue[2]}, thank you
+				for taking your time. Your Details have been sucessfully submitted.`;
+			statusCover.style.display="inline-flex";
+		}else{
+
+
+		}
+	}catch (TypeError){
 	
-	if (proceedToStatus===true){
-
-
-	}else{
-
-
+		console.log("Error 404 page not found!!!");
 	}
+	
 };
 
 
