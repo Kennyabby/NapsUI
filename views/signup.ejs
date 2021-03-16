@@ -10,23 +10,43 @@
 	<link rel="stylesheet" type="text/css" href="signup.css">
 </head>
 <body>
+
 	<p class="head">Registeration Platform (Naps UI)</p>
-	<div class="cover">
+	<div class="information" id="information">
+		
+		<p>Welcome to Naps UI Registeration Platform</p>
+		<p class="align-left" style="margin-top: 50px">The Registration Process Are As Outlined Below:</p>
+		<ul class="align-left">
+			<li class="size">
+				The required fields are prefixed with "*".
+			</li>
+			<li class="size">
+				The non required fields may be filled after sign in.
+			</li>
+			<li class="size">
+				The Registration process are made up of five sessions. These are: Basic-info, School-info, Contact-Address, Sign-in Info and Finish.
+			</li>
+
+		</ul>
+
+		<button id="proceed" title="Click To Conitue">Continue</button>
+	</div>
+	<div class="cover" id="cover">
 		<ul class="stages">
 			<li>
-				<h1 class="proccess active" id="basic"> Basic-Info</h1>
+				<div style="display:inline-flex;" id="basicComp"><h1 class="proccess active" id="basic">Basic-Info</h1></div>
 			</li>
 			<li>
-				<h1 class="proccess" id="school">School-Info</h1>
+				<div style="display:inline-flex" id="schoolComp"><h1 class="proccess" id="school">School-Info</h1></div>
 			</li>
 			<li>
-				<h1 class="proccess" id="cont">Contact-Address</h1>
+				<div style="display:inline-flex" id="contComp"><h1 class="proccess" id="cont">Contact-Address</h1></div>
 			</li>
 			<li>
-				<h1 class="proccess" id="signin">Sign in-Info</h1>
+				<div style="display:inline-flex" id="signinComp"><h1 class="proccess" id="signin">Sign in-Info</h1></div>
 			</li>
 			<li>
-				<h1 class="proccess" id="finil">Finish</h1>
+				<div style="display:inline-flex" id="finilComp"><h1 class="proccess" id="finil">Finish</h1></div>
 			</li>
 		</ul>
 		
@@ -88,7 +108,7 @@
 				</p>
 
 				<p>	
-					<span style="color:red; margin-right:5px;">*</span><input class="inputs"type="email" name="School Email" placeholder="School Email Address" id="inputSchoolEmail"  title="Please Enter Your School Email Address" required><span class="input-tooltip" id="inputSchoolEmailTip"></span>
+					<input class="inputs"type="email" name="School Email" placeholder="School Email Address" id="inputSchoolEmail"  title="Please Enter Your School Email Address"><span class="input-tooltip" id="inputSchoolEmailTip"></span>
 				</p>
 
 				<p>	

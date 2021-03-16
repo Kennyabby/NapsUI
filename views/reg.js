@@ -4,6 +4,9 @@
 // const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority"
 // const {MongoClient} = require('mongodb');
 
+var regCover = document.getElementById("cover");
+var information = document.getElementById("information");
+var proceed = document.getElementById("proceed");
 var inputFirstName = document.getElementById("inputFirstName");
 var inputMiddleName = document.getElementById("inputMiddleName");
 var inputLastName = document.getElementById("inputLastName");
@@ -13,6 +16,7 @@ var inputParentName = document.getElementById("inputParentName");
 var inputBirthday = document.getElementById("inputBirthday");
 var inputMatricNo = document.getElementById("inputMatricNo");
 var inputSchoolEmail = document.getElementById("inputSchoolEmail");
+inputSchoolEmail.disabled=true;
 var inputEmail = document.getElementById("inputEmail");
 var inputContact = document.getElementById("inputContact");
 var inputOtherContact = document.getElementById("inputOtherContact");
@@ -23,6 +27,7 @@ var inputParentAddress = document.getElementById("inputParentAddress");
 var inputUserName = document.getElementById("inputUserName");
 var inputPassword = document.getElementById("inputPassword");
 var inputConfirmPassword = document.getElementById("inputConfirmPassword");
+inputConfirmPassword.disabled=true;
 var hallList = ["MELLANBY", "TEDDER", "KUTI", "SULTAN BELLO", "QUEEN ELIZABETH II", "INDEPENDENCE", 
 "IDIA", "OBAFEMI AWOLOWO", "ALEXANDER BROWN", "INDEPENDENCE", "NNAMDI AZIKWE", "ABDULSALAMI ABUBAKAR"];
 var toggleMale = document.getElementById("male");
@@ -45,7 +50,9 @@ var firstClicked=true, middleClicked=false, lastClicked=false;
 var inputClicked=-1, windowClicked=0;
 var verifiedList=[];
 var basicCompleted=false, schoolCompleted=false, contCompleted=false, signinCompleted=false;
-var proceedToNext=false;
+var isBasicFirstImg=true, isSchoolFirstImg=true, isContFirstImg=true, isSigninFirstImg=true;
+var proceedToNext=false, proceedToFinish=false;
+var proceedToStatus=false;
 var password="";
 var cpassword="";
 var current = document.getElementById("current");
@@ -106,7 +113,9 @@ function displayUserData(){
 	if (rewriteData>1){
 		removePrevUserData();
 	}
-
+	var prefix = inputFirstName.value[0].toLowerCase()+
+	inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
+	inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
 	inputList.forEach(function(val){
 
 		if (val===inputPassword || val===inputConfirmPassword){
@@ -315,12 +324,10 @@ function update(infoVal, infoList, infoCount){
 	infosList.forEach(function (val){
 
 		if (val===infoVal){
-			val.style.display="";
-				
+			val.style.display="";	
 		}
 
 		else{
-		
 			val.style.display="none";
 		}
 		
@@ -342,38 +349,145 @@ function labelUpdate(label){
 	signinLabel.style.borderBottom="none";
 	finilLabel.style.borderBottom="none";
 	label.style.borderBottom="solid #ff4444ff 3px";
+
 };
 
-function validateInputs(){
+function validateNextInputs(index){
 	
 	verifiedList=[];
 	var proceedCount=0;
-	var inputParent = infosList[infosCount].children[count].querySelectorAll("input");
+	inputParent = infosList[index].children[count].querySelectorAll("input");
+		
 	inputParent.forEach(function(input){
 		if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
 			
 			if (input.value.length>0){
 				++proceedCount;
-				if (input===inputPassword){
-					password=inputPassword.value;
-				}else if(input===inputConfirmPassword){
-					cpassword=inputConfirmPassword.value;
+				if(input===inputConfirmPassword){
+					
+					if(input.value!=inputPassword.value){
+						--proceedCount;
+					}
+				}
+
+				if(input===inputMatricNo && String(Number(input.value)).length<6){
+					--proceedCount;
 				}
 				
 			}
 			verifiedList = verifiedList.concat(input);
 		}
 	})
+	
 
 	if (proceedCount===verifiedList.length){
 		
 		proceedToNext=true;
 		
+
 	}
 	else{
 		proceedToNext=false;
+		
 	}
 
+}
+
+function validateInputs(index){
+	
+	verifiedList=[];
+	var proceedCount=0;
+	var currentLength = infosList[index].children.length;
+	if(index===infosCount){
+		var lengthe = infosList[index].children[currentLength-1].children.length;	
+	}
+	else{
+		var lengthe = infosList[index].children.length;
+	}
+	var inputParent = [];
+	for (var i=0; i<lengthe; i++){
+		inputParent = infosList[index].children[i].querySelectorAll("input");
+		
+		inputParent.forEach(function(input){
+			if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
+				
+				if (input.value.length>0){
+					++proceedCount;
+					if(input===inputConfirmPassword){
+						
+						if(input.value!=inputPassword.value){
+							--proceedCount;
+						}
+					}
+
+					if(input===inputMatricNo && String(Number(input.value)).length<6){
+						--proceedCount;
+					}
+					
+				}
+				verifiedList = verifiedList.concat(input);
+			}
+		})
+		
+	}
+	
+
+	if (proceedCount===verifiedList.length){
+		
+		proceedToFinish=true;
+		displayComp();
+
+	}
+	else{
+		proceedToFinish=false;
+		displayInComp();
+	}
+
+}
+
+function displayComp(){
+	
+	
+	if( isCompletedInfo(infosCount)){
+		updateCompImg("complete.png");
+		
+	}
+}
+
+function addImg(src){
+	divId=infosChildLabel().id+"Comp";
+	imgId=infosChildLabel().id+"Img";
+	var div = document.getElementById(divId);
+	var currImg = document.createElement("img");
+	currImg.id=imgId;
+	currImg.className="comp";
+	currImg.src=src;
+	div.appendChild(currImg);
+}
+
+function updateCompImg(src){
+
+	divId=infosChildLabel().id+"Comp";
+	imgId=infosChildLabel().id+"Img";
+	var currImg = document.getElementById(imgId);
+	var div = document.getElementById(divId);
+	div.removeChild(currImg);
+
+	var currImg = document.createElement("img");
+	currImg.id=imgId;
+	currImg.className="comp";
+	currImg.src=src;
+	div.appendChild(currImg);
+
+}
+
+function displayInComp(){
+	
+	divId=infosChildLabel().id+"Comp";
+	if( isCompletedInfo(infosCount)){
+		updateCompImg("incomplete.png");
+		
+	}
 }
 
 function monitorInput(input,parent){
@@ -388,15 +502,95 @@ function monitorInput(input,parent){
 
 			if (input.value.length===0){
 
+				if (input===inputPassword){
+					inputConfirmPassword.disabled=true;
+					inputConfirmPassword.value="";
+					inputConfirmPassword.innerHTML="";
+				}
 				input.style.border="solid rgb(255,0,0) 2px";
 				toolTip.innerHTML=input.title;
+				validateInputs(infosCount);
 			}
 			else{
-				input.style.border="solid #1111ff99 2px";
-				toolTip.innerHTML="";
+				if (input===inputConfirmPassword && input.value!=inputPassword.value){
+					
+					input.style.border="solid rgb(255,0,0) 2px";
+					toolTip.innerHTML="Passwords Do Not Match!";
+					validateInputs(infosCount);
+			
+				}else if(input===inputMatricNo && String(Number(input.value)).length<6){
+					input.style.border="solid rgb(255,0,0) 2px";
+					toolTip.innerHTML="Enter A Valid Matric Number!";
+					inputSchoolEmail.value="";
+					validateInputs(infosCount);
+				}
+				else{
+					if(input===inputMatricNo){
+						var prefix = inputFirstName.value[0].toLowerCase()+
+						inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
+						inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
+					}
+					if(input===inputPassword){
+						inputConfirmPassword.disabled=false;
+					}
+					input.style.border="solid #1111ff99 2px";
+					toolTip.innerHTML="";
+					validateInputs(infosCount);	
+				}
+				
 			}
 		}	
 	}
+}
+
+function monitorAll(){
+
+	inputList.forEach((input) => {
+		var toolTip = document.getElementById(input.id+"Tip");
+		if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
+
+			if (input.value.length===0){
+
+				if (input===inputPassword){
+					inputConfirmPassword.disabled=true;
+					inputConfirmPassword.value="";
+					inputConfirmPassword.innerHTML="";
+				}
+				input.style.border="solid rgb(255,0,0) 2px";
+				toolTip.innerHTML=input.title;
+				validateInputs(infosCount);
+			}
+			else{
+				if (input===inputConfirmPassword && input.value!=inputPassword.value){
+					
+					input.style.border="solid rgb(255,0,0) 2px";
+					toolTip.innerHTML="Passwords Do Not Match!";
+					validateInputs(infosCount);
+			
+				}else if(input===inputMatricNo && String(Number(input.value)).length<6){
+					input.style.border="solid rgb(255,0,0) 2px";
+					toolTip.innerHTML="Enter A Valid Matric Number!";
+					inputSchoolEmail.value="";
+					validateInputs(infosCount);
+				}
+				else{
+					if(input===inputMatricNo){
+						var prefix = inputFirstName.value[0].toLowerCase()+
+						inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
+						inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
+					}
+					if(input===inputPassword){
+						inputConfirmPassword.disabled=false;
+					}
+					input.style.border="solid #1111ff99 2px";
+					toolTip.innerHTML="";
+					validateInputs(infosCount);	
+				}
+				
+			}
+		}
+	})
+	
 }
 function createInputEvents(){
 
@@ -443,20 +637,44 @@ signinLabel.addEventListener("click", function(){
 });
 
 finilLabel.addEventListener("click", function(){
+	var cot=0;
+	var holdCount = infosCount;
+	for (var i=0; i<4; i++){
+		validateInputs(i);
+		infosCount=i;
+		if (proceedToFinish===true){
+			++cot;
+			checkCompletedInfo(i);
+			initializeCompImg(i);
+			displayComp();
+			// isPageSlide=true;
+			infosCount=holdCount;
+		}
+		else{
+			checkCompletedInfo(i);
+			initializeCompImg(i);
+			displayInComp();
+			infosCount=holdCount;
+		}
+	}
+	infosCount=holdCount;
+	
+	if (cot===4){
+		proceedToFinish=true;
+	}
+	else{
+		proceedToFinish=false;
+	}
 
-	validateInputs();
-	if (proceedToNext===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
+	if (proceedToFinish===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
 		++rewriteData;
 		count=0;
 		infosCount=4;
 		update(infosList[infosCount],infosChildList(), count);
+		proceedToFinish=false;
 	}
 	else{
-		verifiedList.forEach(function(input){
-			var infosChildId=infosList[infosCount].id;
-			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
-			monitorInput(input,infosTag);
-		})
+		monitorAll();
 		
 	}
 
@@ -464,7 +682,7 @@ finilLabel.addEventListener("click", function(){
 
 next.addEventListener("click", function(){
 
-	validateInputs();
+	validateNextInputs(infosCount);
 	if (proceedToNext===true){
 		isPageActive=true;
 		++count;
@@ -505,17 +723,52 @@ function checkCompletedInfo(count){
 		schoolCompleted=true;
 	}else if (count===2){
 		contCompleted=true;
-	}else if (count===4){
-
+	}else if (count===3){
+		signinCompleted=true;
 	}
 }
 
+function isCompletedInfo(count){
+	if (count===0){
+		return basicCompleted;
+	}else if (count===1){
+		return schoolCompleted;
+	}else if (count===2){
+		return contCompleted;
+	}else if (count===3){
+		return signinCompleted;
+	}
+}
+
+function initializeCompImg(count){
+	if (count===0 && isBasicFirstImg===true){
+		addImg("complete.png");
+		isBasicFirstImg=false;
+	}else if (count===1 && isSchoolFirstImg===true){
+		addImg("complete.png");
+		isSchoolFirstImg=false;
+	}else if (count===2 && isContFirstImg===true){
+		addImg("complete.png");
+		isContFirstImg=false;
+	}else if (count===3 && isSigninFirstImg===true){
+		addImg("complete.png");
+		isSigninFirstImg=false;
+	}
+}
+
+proceed.addEventListener("click", () => {
+
+	information.style.display="none";
+	regCover.style.display="inline-flex";
+})
 save.addEventListener("click", function(){
 
-	validateInputs();
+	validateInputs(infosCount);
 	if (proceedToNext===true){
 		count=0;
 		checkCompletedInfo(infosCount);
+		initializeCompImg(infosCount);
+		displayComp();
 		++infosCount;
 		isPageSlide=true;
 		update(infosList[infosCount],infosChildList(), count);
@@ -533,31 +786,43 @@ save.addEventListener("click", function(){
 });
 finish.addEventListener("click", function(){
 
-	validateInputs();
-	if (proceedToNext===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
-		var inpt = document.getElementById("inputConfirmPasswordTip");
-		if (password!==cpassword){
+	var cot=0;
+	var holdCount = infosCount;
+	for (var i=0; i<4; i++){
+		validateInputs(i);
+		infosCount=i;
+		if (proceedToFinish===true){
+			++cot;
+			checkCompletedInfo(i);
+			initializeCompImg(i);
+			displayComp();
 			
-			inpt.style.border="solid rgb(255,0,0) 2px"; 
-			inpt.innerHTML="Passwords Do Not Match!";
+			infosCount=holdCount;
 		}
 		else{
-			inpt.style.border="solid #1111ff99 2px";
-			++rewriteData;
-			count=0;
-			++infosCount;
-			isPageSlide=true;
-			update(infosList[infosCount],infosChildList(), count);	
+			checkCompletedInfo(i);
+			initializeCompImg(i);
+			displayInComp();
+			infosCount=holdCount;
 		}
-		
+	}
+	infosCount=holdCount;
+	
+	if (cot===4){
+		proceedToFinish=true;
 	}
 	else{
-
-		verifiedList.forEach(function(input){
-			var infosChildId=infosList[infosCount].id;
-			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
-			monitorInput(input,infosTag);
-		})
+		proceedToFinish=false;
+	}
+	if (proceedToFinish===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
+		++rewriteData;
+		count=0;
+		infosCount=4;
+		update(infosList[infosCount],infosChildList(), count);
+		proceedToFinish=false;
+	}
+	else{
+		monitorAll();
 		
 	}
 	
@@ -607,8 +872,19 @@ async function postToServer(){
 	};
 
 	const response = await fetch('/Registeration_Status', options);
+	if (response===null){
+		console.log("no response: error 404");
+	}
 	const json = await response.json();	
-	console.log(json.sts);
+	proceedToStatus = json.sts;
+	
+	if (proceedToStatus===true){
+
+
+	}else{
+
+
+	}
 };
 
 

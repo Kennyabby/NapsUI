@@ -30,11 +30,12 @@ app.get('/Events', (req,res) => {
 app.get('/About', (req,res) => {
 	res.send("Our About Page will be ready shortly..");
 });
-app.post('/Registeration_Status',async (req, res) =>{
+app.post('/Registeration_Status',(req, res) =>{
 	console.log('I got a request!');
 	console.log(req.body);
 	newUser = req.body;
 	main().catch(console.error);
+	createdStatus=true;
 	console.log(createdStatus);
 	res.json({
 
@@ -46,7 +47,7 @@ app.post('/Registeration_Status',async (req, res) =>{
 async function main(){
 
 	const url ="mongodb://127.0.0.1:27017";
-	const client = new MongoClient(url,useUnifiedTopology=true);
+	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 
 		await client.connect();
@@ -61,7 +62,6 @@ async function main(){
 	}
 	async function createListing(client, newListing){
 	    const result = await client.db("napsui").collection("NapsDatabase").insertOne(newListing);
-	    createdStatus=true;
 				   
 	};
 }
