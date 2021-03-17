@@ -6,6 +6,11 @@
 
 var regCover = document.getElementById("cover");
 var statusCover = document.getElementById("statusCover");
+var waitCover = document.getElementById("waitCover");
+var errorCover = document.getElementById("errorCover");
+var error = document.getElementById("serverError");
+var again = document.getElementById("again");
+var goBack = document.getElementById("go_back");
 var information = document.getElementById("information");
 var proceed = document.getElementById("proceed");
 var inputFirstName = document.getElementById("inputFirstName");
@@ -759,13 +764,15 @@ function initializeCompImg(count){
 
 proceed.addEventListener("click", () => {
 
+	again.style.display="none";
+	goBack.style.display="none";
 	information.style.display="none";
 	regCover.style.display="inline-flex";
 })
 save.addEventListener("click", function(){
 
 	validateInputs(infosCount);
-	if (proceedToNext===true){
+	if (proceedToFinish===true){
 		count=0;
 		checkCompletedInfo(infosCount);
 		initializeCompImg(infosCount);
@@ -829,6 +836,7 @@ finish.addEventListener("click", function(){
 	
 
 });
+
 submit.addEventListener("click", function(){
 
 	// count=0;
@@ -836,9 +844,28 @@ submit.addEventListener("click", function(){
 	// isPageSlide=true;
 	// update(infosList[infosCount],infosChildList(), count);
 	
+	regCover.style.display = "none";
+	waitCover.innerHTML= "Please Wait.."
+	waitCover.style.display="inline-flex";
 	postToServer();
 });
 
+again.addEventListener("click", function(){
+
+	errorCover.style.display="none";
+	regCover.style.display = "none";
+	waitCover.innerHTML= "Please Wait.."
+	waitCover.style.display="inline-flex";
+	postToServer();
+});
+
+goBack.addEventListener("click", function(){
+
+	errorCover.style.display="none";
+	goBack.style.display="none";
+	again.style.display="none";
+	regCover.style.display="inline-flex";
+});
 
 async function postToServer(){
 
@@ -879,16 +906,21 @@ async function postToServer(){
 		
 		if (proceedToStatus===true){
 
-			regCover.style.display = "none";
+			waitCover.style.display = "none";
 			statusCover.innerHTML= `Dear ${detailsValue[0]} ${detailsValue[1]} ${detailsValue[2]}, thank you
 				for taking your time. Your Details have been sucessfully submitted.`;
 			statusCover.style.display="inline-flex";
 		}else{
 
-
+			throw (TypeError);
 		}
 	}catch (TypeError){
-	
+		
+		waitCover.style.display="none";
+		error.innerHTML="Could not Connect to Server. Check your internet Connection, or Contact the administrator at Zerox.com";
+		again.style.display="";
+		goBack.style.display="";
+		errorCover.style.display="inline-block";
 		console.log("Error 404 page not found!!!");
 	}
 	

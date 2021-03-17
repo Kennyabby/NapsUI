@@ -32,11 +32,9 @@ app.get('/About', (req,res) => {
 });
 app.post('/Registeration_Status',(req, res) =>{
 	console.log('I got a request!');
-	console.log(req.body);
 	newUser = req.body;
 	main().catch(console.error);
 	createdStatus=true;
-	console.log(createdStatus);
 	res.json({
 
 		sts: createdStatus

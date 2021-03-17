@@ -122,7 +122,31 @@ body {
   color: #ffffffff;
   margin: 25px;
   margin-top: 150px;
-  padding: 0px;
+  padding: 30px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border: solid white 1px;
+  box-shadow: 6px 6px 7px black;
+
+}
+
+.errStyle{
+
+  background-size: cover;
+  background-color: #333333ff;
+  justify-content: center;
+  display: inline-block;
+  display: none;
+  text-align: center;
+  align-content: center;
+  text-align: center;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: #ffffffff;
+  margin: 25px;
+  margin-top: 150px;
+  padding: 30px;
   padding-top: 50px;
   padding-bottom: 50px;
   border: solid white 1px;
@@ -340,7 +364,7 @@ label{
 
   margin-right: 5px;
   background-color: red;
-  outline: none;
+  outline: none; 
   border-radius: 5px;
   width: 7px;
   height: 7px;
@@ -376,6 +400,12 @@ label{
   text-align: center;
   display: none;
 
+}
+
+.err-val{
+  flex-wrap: wrap;
+  display: block;
+  text-align: center;
 }
 
 #next{
@@ -462,6 +492,41 @@ label{
   border-radius: 10px;
   cursor: pointer;
   outline: none;  
+}
+
+#again{
+  
+  font-size: .8rem;
+  font-weight: bold;
+  margin: 5px;
+  margin-left: 100px;
+  padding:10px;
+  padding-right: 20px;
+  padding-left: 20px; 
+  background-color: #44ff4499;
+  color: white;
+  border: solid #ff444499 2px;
+  border-radius: 10px;
+  cursor: pointer;
+  outline: none;  
+}
+
+#go_back{
+
+  font-size: .8rem;
+  font-weight: bold;
+  margin: 5px;
+  margin-right: 100px;
+  padding:10px;
+  padding-right: 20px;
+  padding-left: 20px; 
+  background-color: #44ff4499;
+  color: white;
+  border: solid #ff444499 2px;
+  border-radius: 10px;
+  cursor: pointer;
+  outline: none;  
+  
 }
 
 .radio{
@@ -588,6 +653,14 @@ label{
   #submit{
     font-size: .6rem;
     margin-left: 50px;
+  }
+  #again{
+    font-size: .6rem;
+    margin-left: 30px;
+  }
+  #go_back{
+    font-size: .6rem;
+    margin-right: 30px;
   }
 
 }
