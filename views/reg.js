@@ -54,11 +54,11 @@ var signinLabel = document.getElementById("signin");
 var finilLabel = document.getElementById("finil");
 var firstClicked=true, middleClicked=false, lastClicked=false;
 var inputClicked=-1, windowClicked=0;
-var verifiedList=[];
+var verifiedList=[], isIncludeMatric=false;
 var basicCompleted=false, schoolCompleted=false, contCompleted=false, signinCompleted=false;
 var isBasicFirstImg=true, isSchoolFirstImg=true, isContFirstImg=true, isSigninFirstImg=true;
-var proceedToNext=false, proceedToFinish=false;
-var proceedToStatus=false;
+var proceedToNext=false, proceedToFinish=false, finished=false;
+var proceedToStatus=false, isMatricError=false, isNextClicked=false, isSaveClicked=false;
 var password="";
 var cpassword="";
 var current = document.getElementById("current");
@@ -358,33 +358,39 @@ function labelUpdate(label){
 
 };
 
-function validateNextInputs(index){
+async function validateNextInputs(index){
 	
 	verifiedList=[];
 	var proceedCount=0;
 	inputParent = infosList[index].children[count].querySelectorAll("input");
-		
-	inputParent.forEach(function(input){
+	
+	await inputParent.forEach(async function(input){
 		if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
 			
 			if (input.value.length>0){
 				++proceedCount;
-				if(input===inputConfirmPassword){
+				if (input===inputConfirmPassword){
 					
 					if(input.value!=inputPassword.value){
 						--proceedCount;
 					}
 				}
 
-				if(input===inputMatricNo && String(Number(input.value)).length<6){
+				if (input===inputMatricNo && String(Number(input.value)).length<6){
 					--proceedCount;
+				}
+				if (input===inputMatricNo && String(Number(input.value)).length>=6){
+
+					if (isIncludeMatric===true){
+						--proceedCount;
+					}
 				}
 				
 			}
 			verifiedList = verifiedList.concat(input);
 		}
 	})
-	
+
 
 	if (proceedCount===verifiedList.length){
 		
@@ -399,7 +405,7 @@ function validateNextInputs(index){
 
 }
 
-function validateInputs(index){
+async function validateInputs(index){
 	
 	verifiedList=[];
 	var proceedCount=0;
@@ -414,20 +420,27 @@ function validateInputs(index){
 	for (var i=0; i<lengthe; i++){
 		inputParent = infosList[index].children[i].querySelectorAll("input");
 		
-		inputParent.forEach(function(input){
+		inputParent.forEach( async function(input){
 			if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
 				
 				if (input.value.length>0){
 					++proceedCount;
-					if(input===inputConfirmPassword){
+					if (input===inputConfirmPassword){
 						
-						if(input.value!=inputPassword.value){
+						if (input.value!=inputPassword.value){
 							--proceedCount;
 						}
 					}
 
-					if(input===inputMatricNo && String(Number(input.value)).length<6){
+					if (input===inputMatricNo && String(Number(input.value)).length<6){
 						--proceedCount;
+					}
+					if (input===inputMatricNo && String(Number(input.value)).length>=6){
+
+						if (isIncludeMatric===true){
+							--proceedCount;
+						}
+ 
 					}
 					
 				}
@@ -440,15 +453,35 @@ function validateInputs(index){
 
 	if (proceedCount===verifiedList.length){
 		
-		proceedToFinish=true;
 		displayComp();
+		proceedToFinish=true;
 
 	}
 	else{
-		proceedToFinish=false;
+		
 		displayInComp();
+		proceedToFinish=false;
 	}
 
+}
+
+async function inspectMatric(){
+
+	const opts = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	};
+	const response= await fetch("/MatricList", opts);
+	const MatricList = await response.json();
+	
+	if (MatricList.matricList.includes(inputMatricNo.value)){
+		isIncludeMatric=true;
+	}
+	else{
+		isIncludeMatric=false;
+	}
 }
 
 function displayComp(){
@@ -496,7 +529,7 @@ function displayInComp(){
 	}
 }
 
-function monitorInput(input,parent){
+async function monitorInput(input,parent){
 
 	var infosChildId = input.parentElement.parentElement.id;
 	var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
@@ -531,17 +564,39 @@ function monitorInput(input,parent){
 					validateInputs(infosCount);
 				}
 				else{
-					if(input===inputMatricNo){
-						var prefix = inputFirstName.value[0].toLowerCase()+
-						inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
-						inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
+					if(input===inputMatricNo && inputLastName.value.length>0 && inputFirstName.value.length>0){
+						const opts = {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							}
+						};
+ 
+						const response= await fetch("/MatricList", opts);
+						const MatricList = await response.json();
+						if (MatricList.matricList.includes(inputMatricNo.value)){
+							input.style.border="solid rgb(255,0,0) 2px";
+							toolTip.innerHTML="A user has claimed the matric number you have entered!";
+							isIncludeMatric=true;
+							validateInputs(infosCount);
+						}else{
+
+							input.style.border="solid #1111ff99 2px";
+							toolTip.innerHTML="";	
+							var prefix = inputFirstName.value[0].toLowerCase()+
+							inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
+							inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";	
+							isIncludeMatric=false;
+							validateInputs(infosCount);
+						}
 					}
-					if(input===inputPassword){
+					else if(input===inputPassword){
 						inputConfirmPassword.disabled=false;
+					}else{
+						input.style.border="solid #1111ff99 2px";
+						toolTip.innerHTML="";
+						validateInputs(infosCount);		
 					}
-					input.style.border="solid #1111ff99 2px";
-					toolTip.innerHTML="";
-					validateInputs(infosCount);	
 				}
 				
 			}
@@ -551,7 +606,7 @@ function monitorInput(input,parent){
 
 function monitorAll(){
 
-	inputList.forEach((input) => {
+	inputList.forEach(async (input) => {
 		var toolTip = document.getElementById(input.id+"Tip");
 		if (input.required===true && input!==inputLevel && input!==inputHall && input!==inputBirthday){
 
@@ -581,16 +636,39 @@ function monitorAll(){
 				}
 				else{
 					if(input===inputMatricNo){
-						var prefix = inputFirstName.value[0].toLowerCase()+
-						inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
-						inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
+						const opts = {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							}
+						};
+ 
+						const response= await fetch("/MatricList", opts);
+						const MatricList = await response.json();
+						if (MatricList.matricList.includes(inputMatricNo.value)){
+							input.style.border="solid rgb(255,0,0) 2px";
+							toolTip.innerHTML="A user has claimed the matric number you have entered!";
+							isIncludeMatric=true;
+							validateInputs(infosCount);
+						}else{
+							input.style.border="solid #1111ff99 2px";
+							toolTip.innerHTML="";
+							var prefix = inputFirstName.value[0].toLowerCase()+
+							inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
+							inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";	
+							isIncludeMatric=false;
+							validateInputs(infosCount);	
+						}
 					}
-					if(input===inputPassword){
+					else if (input===inputPassword){
 						inputConfirmPassword.disabled=false;
 					}
-					input.style.border="solid #1111ff99 2px";
-					toolTip.innerHTML="";
-					validateInputs(infosCount);	
+					else{
+						input.style.border="solid #1111ff99 2px";
+						toolTip.innerHTML="";
+						validateInputs(infosCount);		
+					}
+					
 				}
 				
 			}
@@ -670,6 +748,7 @@ finilLabel.addEventListener("click", function(){
 	}
 	else{
 		proceedToFinish=false;
+		finished=false;
 	}
 
 	if (proceedToFinish===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
@@ -677,6 +756,7 @@ finilLabel.addEventListener("click", function(){
 		count=0;
 		infosCount=4;
 		update(infosList[infosCount],infosChildList(), count);
+		finished=true;
 		proceedToFinish=false;
 	}
 	else{
@@ -686,25 +766,46 @@ finilLabel.addEventListener("click", function(){
 
 });
 
-next.addEventListener("click", function(){
+async function nextClicked(){
 
-	validateNextInputs(infosCount);
-	if (proceedToNext===true){
-		isPageActive=true;
-		++count;
-		updateRegTo(infosList[infosCount],infosChildList(),count);	
+	isNextClicked=true;
+	try {
+		if (infosCount===1){
+			await inspectMatric();	
+		}
+		validateNextInputs(infosCount).then( ()=> {
+
+			isMatricError=false;
+			isNextClicked=false;
+			errorCover.style.display="none";
+			waitCover.style.display="none";
+			regCover.style.display="inline-flex";
+			if (proceedToNext===true){
+				isPageActive=true;
+				++count;
+				updateRegTo(infosList[infosCount],infosChildList(),count);	
+			}
+			else{
+				verifiedList.forEach(function(input){
+					var infosChildId=infosList[infosCount].id;
+					var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+					monitorInput(input,infosTag);
+
+				});
+			}
+		});	
+	}catch(TypeError){
+		isMatricError=true;
+		regCover.style.display="none";
+		waitCover.style.display="none";
+		error.innerHTML="Could not Connect to Server. Check your internet Connection, or Contact the administrator at Zerox.com";
+		again.style.display="";
+		goBack.style.display="";
+		errorCover.style.display="inline-block";
 	}
-	else{
-		verifiedList.forEach(function(input){
-			var infosChildId=infosList[infosCount].id;
-			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
-			monitorInput(input,infosTag);
-		})
-		
-	}
+}
+next.addEventListener("click", nextClicked);
 	
-
-});
 back.addEventListener("click", function(){
 
 	
@@ -769,34 +870,58 @@ proceed.addEventListener("click", () => {
 	information.style.display="none";
 	regCover.style.display="inline-flex";
 })
-save.addEventListener("click", function(){
 
-	validateInputs(infosCount);
-	if (proceedToFinish===true){
-		count=0;
-		checkCompletedInfo(infosCount);
-		initializeCompImg(infosCount);
-		displayComp();
-		++infosCount;
-		isPageSlide=true;
-		update(infosList[infosCount],infosChildList(), count);
-	}
-	else{
-		verifiedList.forEach(function(input){
-			var infosChildId=infosList[infosCount].id;
-			var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
-			monitorInput(input,infosTag);
-		})
-		
-	}
+async function savedClicked(){
 	
+	isSaveClicked=true;
+	try{
 
-});
+		if (infosCount===1){
+			await inspectMatric();	
+		}
+		validateInputs(infosCount).then( ()=> {
+			isMatricError=false;
+			isSaveClicked=false;
+			errorCover.style.display="none";
+			waitCover.style.display="none";
+			regCover.style.display="inline-flex";
+			if (proceedToFinish===true){
+				count=0;
+				checkCompletedInfo(infosCount);
+				initializeCompImg(infosCount);
+				displayComp();
+				++infosCount;
+				isPageSlide=true;
+				update(infosList[infosCount],infosChildList(), count);
+
+			}
+			else{
+				verifiedList.forEach(function(input){
+					var infosChildId=infosList[infosCount].id;
+					var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
+					monitorInput(input,infosTag);
+				});
+				
+			}	
+		});	
+	}catch(TypeError){
+		isMatricError=true;
+		waitCover.style.display="none";
+		regCover.style.display="none";
+		error.innerHTML="Could not Connect to Server. Check your internet Connection, or Contact the administrator at Zerox.com";
+		again.style.display="";
+		goBack.style.display="";
+		errorCover.style.display="inline-block";
+
+	}
+}
+save.addEventListener("click", savedClicked);
 finish.addEventListener("click", function(){
 
 	var cot=0;
 	var holdCount = infosCount;
 	for (var i=0; i<4; i++){
+		inspectMatric();
 		validateInputs(i);
 		infosCount=i;
 		if (proceedToFinish===true){
@@ -821,12 +946,14 @@ finish.addEventListener("click", function(){
 	}
 	else{
 		proceedToFinish=false;
+		finished=false;
 	}
 	if (proceedToFinish===true && basicCompleted===true && schoolCompleted===true && contCompleted===true){
 		++rewriteData;
 		count=0;
 		infosCount=4;
 		update(infosList[infosCount],infosChildList(), count);
+		finished=true;
 		proceedToFinish=false;
 	}
 	else{
@@ -852,11 +979,29 @@ submit.addEventListener("click", function(){
 
 again.addEventListener("click", function(){
 
-	errorCover.style.display="none";
-	regCover.style.display = "none";
-	waitCover.innerHTML= "Please Wait.."
-	waitCover.style.display="inline-flex";
-	postToServer();
+	if (finished===true){
+		errorCover.style.display="none";
+		regCover.style.display = "none";
+		waitCover.innerHTML= "Please Wait.."
+		waitCover.style.display="inline-flex";
+		postToServer();
+	}
+	if (isMatricError=true){
+
+		if (isNextClicked===true){
+			errorCover.style.display="none"
+			waitCover.innerHTML= "Please Wait.."
+			waitCover.style.display="inline-flex"
+			nextClicked();
+		}
+		else if (isSaveClicked===true){
+			errorCover.style.display="none"
+			waitCover.innerHTML= "Please Wait.."
+			waitCover.style.display="inline-flex"
+			savedClicked();
+		}
+	}
+	
 });
 
 goBack.addEventListener("click", function(){
@@ -900,8 +1045,8 @@ async function postToServer(){
 	};
 
 	try{
-		const response = await fetch('/Registeration_Status', options);	
-		const json = await response.json();	
+		const response1 = await fetch('/Registeration_Status', options);	
+		const json = await response1.json();	
 		proceedToStatus = json.sts;
 		
 		if (proceedToStatus===true){

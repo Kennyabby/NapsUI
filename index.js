@@ -6,6 +6,7 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 var newUser;
+var matList =[];
 var createdStatus=false;
 
 app.listen(process.env.PORT || 3000,()=>{
@@ -30,26 +31,48 @@ app.get('/Events', (req,res) => {
 app.get('/About', (req,res) => {
 	res.send("Our About Page will be ready shortly..");
 });
-app.post('/Registeration_Status',(req, res) =>{
-	console.log('I got a request!');
-	newUser = req.body;
-	main().catch(console.error);
-	createdStatus=true;
-	res.json({
+app.post('/MatricList',async (req, res) =>{
+	console.log("got the request for Matric List");
+	await main("findMatric").catch(console.error).then(()=>{
 
-		sts: createdStatus
+		res.json({
 
+			matricList: matList
+
+		});	
 	});
+	
+	
+})
+app.post('/Registeration_Status',async (req, res) =>{
+	
+	newUser = await req.body;
+
+	await main("insertOneUser").catch(console.error).then(()=>{
+
+		res.json({
+
+			sts: createdStatus
+
+		});
+	});
+	
 })
 
-async function main(){
+async function main(action){
 
 	const url ="mongodb://127.0.0.1:27017";
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 
 		await client.connect();
-		await createListing(client,newUser);
+		if (action==="insertOneUser"){
+			await createListing(client,newUser);	
+		}
+		if (action==="findMatric"){
+
+			await findListing(client,"MatricNo").catch(console.error);
+		}
 		
 	}catch (e){
 		console.error(e);
@@ -60,6 +83,17 @@ async function main(){
 	}
 	async function createListing(client, newListing){
 	    const result = await client.db("napsui").collection("NapsDatabase").insertOne(newListing);
-				   
+		createdStatus=true;		  
 	};
+	async function findListing(client,name){
+		console.log("fetching matric list");
+		const result = await client.db("napsui").collection("NapsDatabase").find({},{ projection: {_id:0,MatricNo: 1}});
+		var mat = await result.toArray();
+		matList=[];
+		for(var i=0; i<mat.length; i++){
+			matList = matList.concat(mat[i].MatricNo);
+		}
+		console.log(matList);
+		
+	}
 }
