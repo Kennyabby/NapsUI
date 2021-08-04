@@ -27,7 +27,7 @@
     "browserify": "^17.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "mongodb": "^3.6.4",
+    "mongodb": "^3.6.10",
     "mongodb-client-encryption": "^1.2.1",
     "react": "^17.0.1",
     "web-vitals": "^1.1.0"
