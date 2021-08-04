@@ -1,4 +1,5 @@
 
+// mongodb://127.0.0.1:27017
 // const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority"
 const {MongoClient} = require('mongodb');
 
@@ -22,7 +23,7 @@ app.get('/', (req,res) => {
 app.get('/Sign-in', (req,res) => {
 	res.render("signin.ejs", {});
 });
-app.get('/Register|Sign-up', (req,res) => {
+app.get('/Register', (req,res) => {
 	res.render("signup.ejs", {});
 });
 app.get('/Events', (req,res) => {
@@ -61,7 +62,7 @@ app.post('/Registeration_Status',async (req, res) =>{
 
 async function main(action){
 
-	const url ="mongodb://127.0.0.1:27017";
+	const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority";
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 
