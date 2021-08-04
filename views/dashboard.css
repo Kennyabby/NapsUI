@@ -1,0 +1,28 @@
+html,
+body{
+	margin: auto 0;
+  padding: auto 0;
+}
+
+body {
+  
+  display: -ms-flexbox; 
+  -ms-flex-align: center; 
+  justify-content: center; 
+  text-align: center;
+  align-items: center; 
+  /*padding-bottom: 40px;*/ 
+  color:white;
+  background-image: url("reg-cover.jpeg"); 
+  background-repeat:none; 
+  background-attachment: fixed; 
+  background-position: fixed; 
+  background-size: cover;
+
+  background-color: #333333ff;
+}
+
+::placeholder {
+  color: #333333ff;
+  opacity: 1;
+}
