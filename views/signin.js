@@ -38,7 +38,7 @@ async function inspectLoginDetails(){
 	userList.forEach( async (user) => {
 		
 		if (user.SchoolEmail===inputEmail.value && user.Password===inputPassword.value){
-			console.log(user.SchoolEmail);
+			// console.log(user.SchoolEmail);
 			// inputEmail.value="";
 			// inputPassword.value="";
 			userIndex=userList.indexOf(user);
@@ -127,13 +127,13 @@ inputEmail.addEventListener("input", () =>{
 
 				countKeys++;
 				isKeyPresent=true;
-				console.log(countKeys)
+				// console.log(countKeys)
 			}
 			else{
 
 				countKeys--;
 				isKeyPresent=false;
-				console.log(countKeys)
+				// console.log(countKeys)
 			}
 		})
 
