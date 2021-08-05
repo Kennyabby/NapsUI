@@ -6,23 +6,23 @@ body{
 
 body {
   
-  display: -ms-flexbox; 
-  -ms-flex-align: center; 
-  justify-content: center; 
-  text-align: center;
-  align-items: center; 
-  /*padding-bottom: 40px;*/ 
+  justify-content: center;
+  display: -ms-flexbox;
+  -ms-flex-align: center;
+  align-items: center;
   color:white;
-  background-image: url("reg-cover.jpeg"); 
-  background-repeat:none; 
-  background-attachment: fixed; 
-  background-position: fixed; 
-  background-size: cover;
+  padding-top: 50px;
+  /*background-image: url("home.jpg");
+  background-repeat:none;*/
+  background-attachment: fixed;
+  background-position: fixed;
+  /*background-size: cover;*/
 
-  background-color: #333333ff;
+  background-color: #333333;
 }
 
 ::placeholder {
   color: #333333ff;
   opacity: 1;
 }
+

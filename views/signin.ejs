@@ -30,7 +30,7 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet"
+    <link href="signin.css" rel="stylesheet">
 </head>
 <body>
 
@@ -61,22 +61,25 @@
   	</ul>
   </nav>
   <div class = "text-center" id="div">
-  <form class="form-signin">
+  <div class="form-signin">
     <img class="mb-4" src="user.png" id="user">
     <h1 class="h3 mb-3 font-weight-normal" style="color:#ffffffff; font-style:  bold; font-family:  serif; font-weight: bold">NAPSITE UI</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-    	
-    <a href="/Dashboard"><button class="btn btn-lg btn-primary btn-block" id="sign-in" type="submit">Sign in</button></a>
-   
-  </form>
-  <p>
-  <h3 class="h6 mb-3 font-weight-normal" style="margin:10px"> Forgot your password? </h3>
-  <button class="btn btn-blue" type="submit" id="fgt">Click here</button>
-  <p id ="valid"><em>&copy; 2020-2021. All Rights Reserved | Design By ZeroX</em></p>
-  </p>
+    <form>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <span class="input-tooltip" id="inputEmailAddressTip"></span>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <span class="input-tooltip" id="inputPasswordTip"></span>
+    </form>
+    <a id="dash-link"><button class="btn btn-lg btn-primary btn-block" id="sign-in" >Sign in</button></a>
+       
+      </div>
+      <p>
+      <h3 class="h6 mb-3 font-weight-normal" style="margin:10px"> Forgot your password? </h3>
+      <button class="btn btn-blue" type="submit" id="fgt">Click here</button>
+      <p id ="valid"><em>&copy; 2020-2021. All Rights Reserved | Design By ZeroX</em></p>
+      </p>
   <p id ="valid"><a href="#" style="color: white; font-family: vardana" title="Click to view Terms of Use">Terms of Use</a></p>
   </p>
   </div>

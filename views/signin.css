@@ -35,7 +35,24 @@ body {
   font-weight: bold;
   text-align: center;
 }
+.input-tooltip{
+  font-size: .8rem;
+  position: relative;
+  display: flex;
+  visibility: visible;
+  background-color: rgba(0,0,0,0.8 );
+  color: #f22;
+  text-align:  center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  margin-top: -10px;
+  border-width: solid;
+  opacity: 1;
+  transition: opacity 0.3s;
 
+}
 #valid{
 
   font-size: 1rem;
