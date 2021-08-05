@@ -39,8 +39,8 @@ async function inspectLoginDetails(){
 		
 		if (user.SchoolEmail===inputEmail.value && user.Password===inputPassword.value){
 			console.log(user.SchoolEmail);
-			inputEmail.value="";
-			inputPassword.value="";
+			// inputEmail.value="";
+			// inputPassword.value="";
 			userIndex=userList.indexOf(user);
 			
 			const options = {
@@ -58,7 +58,7 @@ async function inspectLoginDetails(){
 				
 				if (detailsSent){
 
-					window.open('/Dashboard', '_blank');
+					window.open('/Dashboard')
 					
 				}else{
 

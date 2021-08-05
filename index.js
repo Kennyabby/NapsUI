@@ -79,7 +79,7 @@ app.post('/LoginDetails',async (req, res) =>{
 	});
 	
 	
-})
+});
 
 app.post('/Dash',async (req, res) =>{
 	
@@ -111,7 +111,7 @@ app.post('/NapsDetails',async (req, res) =>{
 
 async function main(action){
 
-	const url ="mongodb://127.0.0.1:27017";
+	const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority";
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 
