@@ -7,10 +7,11 @@ body{
 body {
   
   justify-content: center;
+  flex-wrap: wrap;
   display: -ms-flexbox;
   -ms-flex-align: center;
   align-items: center;
-  /*text-align: center;*/
+  text-align: center;
   color:white;
   /*padding-top: 10px;*/
   /*background-image: url("home.jpg");
@@ -18,8 +19,8 @@ body {
   background-attachment: fixed;
   background-position: fixed;
   background-size: cover;
-
   background-color: #######;
+  /*background-image: url("9UsWBvm4ScyGW7QOn2yz_20190122-Is-space-time-a-quantum-code-Featured.jpg");*/
 }
 
 ::placeholder {
@@ -29,18 +30,21 @@ body {
 
 .side{
 
+  position: fixed;
   display: inline-block;
   flex-wrap: wrap;
   text-align: left;
   margin:0px;
   padding: 0px;
-  margin-right: 140px;
+  margin-right: 10px;
   padding-top: 10px;
   padding-right: 10px;
+  top: 0px;
+  height: 100%;
   background-color: #000000ff;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  float: left;
+  /*float: left;*/
   list-style: none;
   text-decoration: none;
 }
@@ -52,45 +56,50 @@ body {
 }
 .top{
 
+  /*position: fixed;*/
   display: inline-flex;
-  flex-wrap: wraps;
+  flex-wrap: wrap;
   justify-content: center;
   margin:0px;
   padding: 0px;
-
+  top: 3px;
+  text-align: center;
+  /*background-color: red;*/
+  margin-left: 100px;
   list-style: none;
   text-decoration: none;
 }
 .topbar{
 
-  flex-wrap: wrap;
   margin: 0px;
+  flex-wrap: wrap;
   list-style: none;
   display:  inline-flex;
   /*background-color: #666666;*/
   
 }
 .center{
-  
-  display: inline-block;
+
+  display:block;
   flex-wrap: wrap;
-  width: 100%;
   margin: 0px;
-  padding: 2px;
-  margin-left: 25px;
-  /*right: 10px;*/
+  margin-right: 10px;
+  /*background-color: green;*/
+  margin-left: 175px;
   text-align: center;
-  /*font-style: italic;*/
+  align-content: center;
   font-family: calibri;
   color: #000000;
+  /*height: 100vh;*/
+  width: 100%;
 
 }
 .sideproccess{
 
   padding: 0px;
   margin: 0px;
-  margin-top: 6px;
   margin-bottom: 40px;
+  margin-top: 8px;
   font-size: 0.9rem;
   font-family: monospace;
   font-weight: bold;
@@ -103,13 +112,14 @@ body {
 
   margin: 0px;
   padding: 0px;
-  padding-top: 10px;
+  padding-top: 5px;
   font-size: 0.9rem;
   font-family: calibri;
   font-weight: bold;
   list-style: none;
   cursor:pointer;
   color: #00000099;
+/*  color: #999999;*/
   margin-right: 100px;
 }
 
@@ -117,10 +127,10 @@ body {
 .first-content{
 
   display:inline-flex;
-  /*flex-wrap: wrap;*/
-  justify-content: center;
   text-align: center;
-  height: 100vh;
+  /*flex-wrap: wrap;*/
+  /*height: 100%;*/
+  width: 100vw;
 
 }
 
@@ -129,6 +139,7 @@ body {
   width:30px;
   margin: 0px;
   padding: 0px;
+  text-align: center;
 }
 .prof-img{
   height:80px;
@@ -155,9 +166,70 @@ body {
 }
 #welcome{ 
 
+  position: fixed;
+  padding: 0px;
+  marging: 0px;
+  text-align: center;
   display: inline-block;
   vertical-align: top;
   cursor: pointer;
+  right:3px;
+  font-family: calibri;
+  font-weight: bold;
   /*background-color: blue;*/
+  color: black
 }
+.other-content{
+  position: relative;
+  background-repeat:none;
+  background-attachment: fixed;
+  background-position: fixed;
+  background-size: cover;
+  /*background-image: url("403105.jpg");*/
+  background-color: #333333;
+  justify-content: center;
+  align-content: center;
+  flex-wrap : wrap;
+  text-align: center;
+  border-radius: 60px;
+  color: #ffffffff;
+  height: 450px;
+  padding: 25px;
+  margin: 25px;
+  margin-top: 40px;
+  border: solid black 1px;
+  box-shadow: 6px 6px 7px black;
+
+}
+
+.prev{
+  position: absolute;
+  background-color: white;
+  left: 15px;
+  bottom: 200px;
+  height:40px;
+  width:40px;
+  border-radius: 50px;
+  padding: 6px;
+  margin: 0px;
+  margin-bottom: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.next{
+  position: absolute;
+  background-color: white;
+  right: 15px;
+  bottom: 200px;
+  height:40px;
+  width:40px;
+  border-radius: 50px;
+  padding: 6px;
+  margin: 0px;
+  margin-bottom: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+
 
