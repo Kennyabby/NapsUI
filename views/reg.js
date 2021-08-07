@@ -1034,6 +1034,8 @@ async function postToServer(){
 		ParentGuardianOtherContact: detailsValue[16],
 		ParentGuardianAddress: detailsValue[17],	
 		Password: detailsValue[18]
+		Active: "off";
+		Admin: "negative";
 	}
 
 	const options = {

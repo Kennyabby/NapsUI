@@ -151,8 +151,8 @@ body {
   margin-bottom: 30px;
 }
 .notify-img{
-  height:20px;
-  width:20px;
+  height:30px;
+  width:30px;
   border-radius: 50px;
   padding: 6px;
   margin: 0px;
@@ -181,11 +181,10 @@ body {
 }
 .other-content{
   position: relative;
-  background-repeat:none;
   background-attachment: fixed;
   background-position: fixed;
   background-size: cover;
-  /*background-image: url("403105.jpg");*/
+  background-repeat:no-repeat;
   background-color: #333333;
   justify-content: center;
   align-content: center;
@@ -229,6 +228,15 @@ body {
   margin-bottom: 30px;
   margin-right: 10px;
   cursor: pointer;
+}
+
+.dash-page{
+
+  display: none;
+}
+.sign-page{
+  
+  display: none;
 }
 
 

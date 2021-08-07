@@ -12,6 +12,7 @@ var details;
 var matList =[];
 var createdStatus=false;
 
+
 app.listen(process.env.PORT || 3000,()=>{
 	console.log("listening at 3000");
 })
@@ -22,8 +23,12 @@ app.set("view engine", "ejs");
 app.get('/', (req,res) => {
 	res.render("index.ejs", {});
 })
-app.get('/Sign-in', (req,res) => {
+app.get('/NapsPage', (req,res) => {
 	res.render("signin.ejs", {});
+});
+app.get('/Sign-out', (req,res) => {
+	res.render("signin.ejs", {});
+	url="";
 });
 app.get('/Register', (req,res) => {
 	res.render("signup.ejs", {});
@@ -110,8 +115,7 @@ app.post('/NapsDetails',async (req, res) =>{
 })
 
 async function main(action){
-
-	const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority";
+	const url ="mongodb://127.0.0.1:27017";
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 

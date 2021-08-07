@@ -13,7 +13,8 @@ body {
   align-items: center;
   padding-bottom: 40px;
   color:white;
-  background-image: url("home.jpg") ;
+  background-color: #######;
+  /*background-image: url("home.jpg") ;*/
   background-repeat:none;
   background-size: cover;
 }
