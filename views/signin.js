@@ -20,8 +20,11 @@ var dashSection = document.getElementById("dashSection");
 var votingSection = document.getElementById("votingSection");
 var discussionSection = document.getElementById("discussionSection");
 var adminSection = document.getElementById("adminSection");
+// var dashSectionDiv = document.getElementById("dashSection-div");
+// var profileDiv = document.getElementById("profile-div");
 var sideList= [profile,notifications,events,tasks,settings];
 var topList= [dashSection,votingSection,discussionSection,adminSection];
+var optionList = [profile,notifications,events,tasks,settings,dashSection,votingSection,discussionSection,adminSection];
 var imgList= ["403105.jpg","9UsWBvm4ScyGW7QOn2yz_20190122-Is-space-time-a-quantum-code-Featured.jpg",
 				"12977115_1153710794652906_1138676803864315944_o.jpg","163-1631522_space-time-curvature-wall-paper.jpg",
 				"464714_589563021067689_1857773835_o.jpg","912712.jpg","981407_589561937734464_29963629_o.jpg",
@@ -129,33 +132,75 @@ async function inspectLoginDetails(){
 							spanTag.style.fontWeight="bold";
 							spanTag.style.padding="0px";
 							spanTag.style.margin="0px";
-							spanTag.style.fontStyle="italic"
+							spanTag.style.fontStyle="italic";
 							// spanTag.style.textAlign="center";
 							spanTag.style.fontSize="0.7rem";
-							console.log(spanTag);
+				
+							var dropTag = document.createElement("img");
+							dropTag.src="drop-down.png";
+							dropTag.className="drop-img";
 							logSection.appendChild(spanTag);
-
-							dashSection.style.color="black";
-							// dashSection.style.color="white";
-							dashSection.style.fontWeight="bold";
+							logSection.appendChild(dropTag);
+							
 
 
 							function shuffle(array) {
 							  var currentIndex = array.length,  randomIndex;
 							  while (0 !== currentIndex) {
-
-							    // Pick a remaining element...
 							    randomIndex = Math.floor(Math.random() * currentIndex);
 							    currentIndex--;
-
-							    // And swap it with the current element.
 							    [array[currentIndex], array[randomIndex]] = [
 							      array[randomIndex], array[currentIndex]];
 							  }
 
 							  return array;
 							}
+
 							imgList = shuffle(imgList);
+
+							var currDiv = sessionStorage.getItem("currDiv-key");
+							optionList.forEach( (opt) => {
+
+								if (currDiv!==null){
+
+									if (opt.id===currDiv){
+
+										opt.style.color="black";
+										if (sideList.includes(opt)){
+											opt.style.color="white";
+										}	
+										// opt.style.color="white";
+										opt.style.fontWeight="bold";
+										var activeDiv = document.getElementById(opt.id+"-div");
+										activeDiv.style.display="block";
+
+									}else{
+
+										var activeDiv = document.getElementById(opt.id+"-div");
+										activeDiv.style.display="none";
+									}
+								}else {
+
+									if (opt.id===dashSection.id){
+
+										opt.style.color="black";
+										if (sideList.includes(opt)){
+											opt.style.color="white";
+										}
+										// opt.style.color="white";
+										opt.style.fontWeight="bold";
+										var activeDiv = document.getElementById(opt.id+"-div");
+										activeDiv.style.display="block";
+
+									}else{
+
+										var activeDiv = document.getElementById(opt.id+"-div");
+										activeDiv.style.display="none";
+									}
+								}
+								
+								
+							});
 
 							imgFlow.style.backgroundImage=`url('${imgList[count]}')`;
 							// imgFlow.style.backgroundSize=`${imgFlow.offsetWidth.toString()}px ${imgFlow.offsetHeight.toString()}px`;
@@ -174,22 +219,35 @@ async function inspectLoginDetails(){
 
 											if (side[i]===opts){
 
-												side[i].style.color=viewColor;
 												if (side===sideList){
 													topList.forEach((opt) => {
 														opt.style.color="#00000099";
-													})
+														var activeDiv = document.getElementById(opt.id+"-div");
+														activeDiv.style.display="none";
+														// console.log("no view for, ",opt.id);
+													});
 												}
 												if (side===topList){
 													sideList.forEach((opt) => {
 														opt.style.color="#999999ff";
-													})
+														var activeDiv1 = document.getElementById(opt.id+"-div");
+														activeDiv1.style.display="none";
+														// console.log("no view for, ",opt.id);
+													});
 												}
+												side[i].style.color=viewColor;
+												var activeDiv2 = document.getElementById(opts.id+"-div");
+												// console.log(opts.id);
+												activeDiv2.style.display="block";
+												sessionStorage.setItem("currDiv-key",opts.id);
+
 
 											}else{
 
 												side[i].style.color=original;
-
+												var activeDiv3 = document.getElementById(side[i].id+"-div");
+												activeDiv3.style.display="none";
+												// console.log("no view for, ",side[i].id);
 											}
 											
 										}
@@ -205,13 +263,13 @@ async function inspectLoginDetails(){
 								
 								nt.style.display="block";
 								pv.style.display="block";
-							}
+							};
 							
 							imgFlow.onmouseleave = ()=> {
 								
 								nt.style.display="none";
 								pv.style.display="none";
-							}
+							};
 
 							nt.addEventListener("click", ()=> {
 
@@ -223,12 +281,14 @@ async function inspectLoginDetails(){
 								imgFlow.style.backgroundImage=`url('${imgList[count]}')`;
 
 							});
+
 							pv.addEventListener("click", ()=> {
 
 								count--;
-								if (count<0){
+								if (count<0) {
 									count=imgList.length-1;
 								}
+
 								console.log(count);
 								imgFlow.style.backgroundImage=`url('${imgList[count]}')`;
 
@@ -243,6 +303,7 @@ async function inspectLoginDetails(){
 								sessionStorage.removeItem("user-email");
 								sessionStorage.removeItem("user-password");
 								sessionStorage.removeItem("dash_key");
+								sessionStorage.removeItem("currDiv-key");
 								console.log(sessionStorage.getItem("dash_key"));
 								if (sessionStorage.getItem("dash_key")===null){
 									console.log("yes");
@@ -254,7 +315,7 @@ async function inspectLoginDetails(){
 						}catch(TypeError){
 
 						}
-
+ 
 						
 					}
 					loadDashboard();
