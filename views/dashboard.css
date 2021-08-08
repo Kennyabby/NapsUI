@@ -23,9 +23,17 @@ body {
   /*background-image: url("9UsWBvm4ScyGW7QOn2yz_20190122-Is-space-time-a-quantum-code-Featured.jpg");*/
 }
 
-::placeholder {
-  color: #333333ff;
-  opacity: 1;
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: red;
+  opacity: 0.5; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: red;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: red;
 }
 
 .side{
@@ -361,6 +369,105 @@ body {
   padding: 0px;
   text-align: center;
 }
+.inputs{
+  margin: 0;
+  outline: none;
+  border-radius: 15px;
+  border: solid black 3px;
+  font-size: .9rem;
+  font-weight: bold;
+  padding: 15px;
+  width: 130px;
+  background-color: #ffffff88;
+  color: black;
+
+}
+.admin-page{
+  display: block;
+  margin-top: 80px;
+}
+.search-bar{
+
+  margin: 0;
+  outline: none;
+  border-radius: 35px;
+  border: solid black 3px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 15px;
+  width: 470px;
+  background-color: #99999944;
+  /*color: #33333355;*/
+
+}
+.search-method{
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.sort-search{
+  cursor: pointer;
+  margin-left: 10px;
+}
+.search-section{
+
+  display: inline-flex;
+  /*margin-top: 80px;*/
+}
+
+.input-tops{
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.input-bottom{
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.search-result{
+  margin-top: 60px;
+  margin-left: 30px;
+  display: block;
+  text-align: center;
+  width: 600px;
+  /*background-color: black;*/
+}
+.result-view {
+  position: relative;
+  background-attachment: fixed;
+  background-position: fixed;
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-color: #333333;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+  flex-wrap : wrap;
+  text-align: center;
+  border-radius: 60px;
+  color: #ffffffff;
+  height: 200px;
+  /*padding: 15px;*/
+  margin: 25px;
+  margin-top: 40px;
+  border: solid black 1px;
+  box-shadow: 6px 6px 7px black;
+  cursor: pointer;
+
+}
+.profi-img{
+  position: absolute;
+  left: 15px;
+  bottom: 25px;
+  height:100px;
+  width: 100px;
+  background-color: #ffffff88;
+  border-radius: 60px;
+  padding: 6px;
+  margin: 0px;
+  margin-bottom: 30px;
+}
+
 
 
 

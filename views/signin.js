@@ -23,11 +23,20 @@ var adminSection = document.getElementById("adminSection");
 var profileIdentifier = document.getElementById("profile-identifier");
 var imageCover = document.getElementById("image-cover");
 var detailsCover = document.getElementById("details-cover");
+var userDetailsCover = document.getElementById("userdetails-cover");
 var editDiv = document.getElementById("edit-div");
 var saveDiv = document.getElementById("save-div");
+var searchMethod = document.getElementById("search-method");
+var searchBar = document.getElementById("search-bar");
+var sortSearch = document.getElementById("sort-search");
+var sortMethodList=["Sort By","100","200","300",
+					"400","Male","Female","Others"];
+var searchMethodList=["User Name","Matric No","Name"];
 var editList=[];
 var editTagList=[];
 var editNewList=[];
+var viewList=[];
+var userViewList=[];
 var sideList= [profile,notifications,events,tasks,settings];
 var topList= [dashSection,votingSection,discussionSection,adminSection];
 var optionList = [profile,notifications,events,tasks,settings,dashSection,votingSection,discussionSection,adminSection];
@@ -41,6 +50,8 @@ var imgList= ["403105.jpg","9UsWBvm4ScyGW7QOn2yz_20190122-Is-space-time-a-quantu
 var imgFlow= document.getElementById("img-flow");
 var nt= document.getElementById("next-img");
 var pv= document.getElementById("prev-img")
+var searchResult = document.getElementById("search-result");
+var resultView = document.getElementById("result-view");
 var count=0;
 var countKeys=0;
 var isKeyPresent=false;
@@ -166,6 +177,8 @@ async function inspectLoginDetails(){
 							imageCover.appendChild(userName);
 
 							if (Napsite.Admin==="positive"){
+
+								adminSection.style.display="";
 								var admin = document.createElement("p");
 								admin.appendChild(document.createTextNode("Admin"));
 								admin.style.position="absolute";
@@ -175,14 +188,341 @@ async function inspectLoginDetails(){
 								admin.style.fontStyle="italic";
 								admin.style.bottom="3px";
 								imageCover.appendChild(admin);
-							}
 
-							var userDetailsValue = [Napsite.FirstName,Napsite.MiddleName,Napsite.LastName,Napsite.UserName,Napsite.MatricNo,
-										Napsite.Gender,Napsite.Level,Napsite.DateOfBirth,Napsite.HallAllocated,
-										Napsite.ContactNumber,Napsite.OtherContactNumber,Napsite.CurrentAddress,
-										Napsite.SchoolEmail,Napsite.OtherEmail,Napsite.ParentGuardianName,
-										Napsite.ParentGuardianAddress,Napsite.ParentGuardianContact,
-										Napsite.ParentGuardianOtherContact];
+								searchBar.placeholder="Enter Napsite User Name"
+								sortMethodList.forEach( (sort)=> {	
+
+									var option = document.createElement("option");
+									option.appendChild(document.createTextNode(sort));
+									sortSearch.appendChild(option);
+								})
+								searchMethodList.forEach( (meth)=>{
+
+									var option = document.createElement("option");
+									option.appendChild(document.createTextNode(meth));
+									searchMethod.appendChild(option);
+								})
+
+								searchMethod.addEventListener("input", ()=> {
+
+									console.log("clicked a method")
+									searchBar.placeholder="Enter Napsite "+searchMethod.value;
+								})
+
+								searchBar.addEventListener("input", async () =>{
+
+									var isSearchFound=false;
+									var userWithUserNameList=[];
+									var userWithUserNameAndSortList=[];
+									var userWithMatricList=[];
+									var userWithMatricAndSortList=[];
+									var userWithNameList=[];
+									var userWithNameAndSortList=[];
+									var foundUser=[];
+									const opts1 = {
+										method: 'POST',
+										headers: {
+											'Content-Type': 'application/json'
+										}
+									};
+									
+									const response2= await fetch("/LoginDetails", opts1);
+									const Usr = await response2.json();
+									const Users = await Usr.detailsList;
+									
+									if (searchMethod.value===searchMethodList[0]){
+
+										
+										Users.forEach( (user) => {
+											
+											if (user.UserName.toLowerCase().includes(searchBar.value)){
+												
+												userWithUserNameList=userWithUserNameList.concat(user);
+
+												isSearchFound=true;
+											}else{
+												isSearchFound=false;
+											}
+
+										})
+
+										if(sortSearch.value!=="Sort By"){
+
+											userWithUserNameList.forEach( (usr) => {
+
+												if(usr.Level.includes(sortSearch.value) || usr.Gender.includes(sortSearch.value)){
+													userWithUserNameAndSortList=userWithUserNameAndSortList.concat(usr);
+													foundUser=userWithUserNameAndSortList;
+													isSearchFound=true;
+												}else{
+													isSearchFound=false;
+												}
+
+											})
+										}else{
+											userWithUserNameAndSortList=userWithUserNameList;
+											foundUser=userWithUserNameAndSortList;
+										}
+										
+										// console.log(userWithUserNameAndSortList);
+										
+									}
+									if (searchMethod.value===searchMethodList[1]){
+
+										
+										Users.forEach( (user) => {
+											
+											if (user.MatricNo.includes(searchBar.value)){
+												
+												userWithMatricList=userWithMatricList.concat(user);
+												isSearchFound=true;
+												
+											}else{
+												isSearchFound=false
+											}
+										})
+
+										if(sortSearch.value!=="Sort By"){
+
+											userWithMatricList.forEach( (usr) => {
+
+												if(usr.Level.includes(sortSearch.value) || usr.Gender.includes(sortSearch.value)){
+													userWithMatricAndSortList=userWithMatricAndSortList.concat(usr);
+													foundUser=userWithMatricAndSortList;
+													isSearchFound=true;
+												}else{
+													isSearchFound=false
+												}
+
+											})
+										}else{
+
+											userWithMatricAndSortList=userWithMatricList;
+											foundUser=userWithMatricAndSortList;
+										}
+										
+										// console.log(userWithMatricAndSortList);
+										
+									}
+									if (searchMethod.value===searchMethodList[2]){
+
+										
+										Users.forEach( (user) => {
+											console.log([user.LastName+" "+user.FirstName+" "+user.MiddleName].toString())
+											if ([user.LastName+" "+user.FirstName+" "+user.MiddleName]
+												.toString().toLowerCase().includes(searchBar.value)){
+												
+												userWithNameList=userWithNameList.concat(user);
+												isSearchFound=true;
+											}else{
+												isSearchFound=false;
+											}
+
+										})
+										if(sortSearch.value!=="Sort By"){
+
+											userWithNameList.forEach( (usr) => {
+
+												if(usr.Level.includes(sortSearch.value) || usr.Gender.includes(sortSearch.value)){
+
+														userWithNameAndSortList=userWithNameAndSortList.concat(usr);
+														foundUser=userWithNameAndSortList;
+														isSearchFound=true;
+												}else{
+													isSearchFound=false
+												}				
+																	
+
+											})
+										}else{
+
+											userWithNameAndSortList=userWithNameList;
+											foundUser=userWithNameAndSortList;
+										}
+
+									}
+
+									console.log(foundUser);
+									// console.log(isSearchFound);
+
+									if(foundUser.length>0 && searchBar.value!==""){
+										if (userViewList.length>0){
+											for(var i=0; i<userViewList.length; i++){
+												userDetailsCover.removeChild(userViewList[i]);
+											}
+											userViewList=[];
+										}
+										if (viewList.length>0){
+											for(var i=0; i<viewList.length; i++){
+												searchResult.removeChild(viewList[i]);
+											}
+											viewList=[];
+										}
+										foundUser.forEach((user) => {
+											
+											var userView = document.createElement("div");
+											var userImg = document.createElement("img");
+											var label = document.createElement("label");
+											var label1 = document.createElement("label");
+											label1.appendChild(document.createTextNode(`${user.UserName}`));
+											label1.style.fontSize="1.2rem";
+											label1.style.fontWeight="bold";
+											label1.style.color="white";
+											label1.style.fontStyle="italic";
+											label1.style.position="absolute";
+											label1.style.bottom="25px";
+											label1.style.right="15px";
+											label1.style.cursor="pointer";
+
+											label.appendChild(document.createTextNode(`${user.LastName} ${user.FirstName} ${user.MiddleName}`))
+											label.style.fontSize="1.5rem";
+											label.style.fontWeight="bold"
+											label.style.color="white";
+											label.style.cursor="pointer";
+
+											userImg.className="profi-img";
+											userImg.src="profile-img.png";
+											userView.appendChild(userImg);
+											userView.appendChild(label);
+											userView.appendChild(label1);										
+											userView.className="result-view";
+
+
+											searchResult.appendChild(userView);
+											viewList=viewList.concat(userView);
+
+											userView.addEventListener("click", () =>{
+
+												if (userView.childNodes[2].innerHTML===Napsite.UserName){
+													
+													sideList.forEach((side)=>{
+
+														if (side===profile){
+															side.style.color="white";
+															var activeDiv2 = document.getElementById(side.id+"-div");
+															// console.log(opts.id);
+															activeDiv2.style.display="block";
+															sessionStorage.setItem("currDiv-key",side.id);
+															topList.forEach((opt) => {
+																opt.style.color="#00000099";
+																var activeDiv = document.getElementById(opt.id+"-div");
+																activeDiv.style.display="none";
+																// console.log("no view for, ",opt.id);
+															});
+
+														}
+														else{
+
+															side.style.color="#999999ff";
+															var activeDiv3 = document.getElementById(side.id+"-div");
+															activeDiv3.style.display="none";
+														}														
+													})								
+																						
+												}else{
+
+													if (viewList.length>0){
+														for(var i=0; i<viewList.length; i++){
+															searchResult.removeChild(viewList[i]);
+														}
+														viewList=[];
+													}
+													if (userViewList.length>0){
+														for(var i=0; i<userViewList.length; i++){
+															userDetailsCover.removeChild(userViewList[i]);
+														}
+														userViewList=[];
+													}
+													var userDetailsName = ["First Name: ","Middle Name: ","Last Name: ","UserName: ","Matric No: ","Gender: ","Level: ",
+														"Date Of Birth: ","Hall Allocated: ","Contact Number: ","Other Contact Number: ","Current Address: ",
+														"School Email: ","Email: ","Parent/Guardian Name: ","Parent/Guardian Address: ",
+														"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
+													var userDetailsValue = initializeUserDetails(user);
+													function addNapsiteDetail(napsiteName,napsiteValue){
+
+														var napsdiv = document.createElement("div");
+														napsdiv.style.display="inline-flex";
+														var nameTag = document.createElement("span");
+														var valueTag = document.createElement("span");
+														valueTag.style.marginLeft="30px";
+														nameTag.appendChild(document.createTextNode(`${napsiteName}`));
+														valueTag.appendChild(document.createTextNode(`${napsiteValue}`));
+														nameTag.style.fontWeight="bold";
+														nameTag.style.fontSize="1.5rem";
+														valueTag.style.fontStyle="italic";
+														nameTag.style.fontFamily="monospace"
+														valueTag.style.fontSize="1.5rem";
+														napsdiv.appendChild(nameTag);
+														napsdiv.appendChild(valueTag);
+														var spaceTag = document.createElement("p");
+														spaceTag.appendChild(napsdiv);
+														spaceTag.style.marginBottom="50px";
+														userDetailsCover.appendChild(spaceTag);	
+														userViewList =userViewList.concat(spaceTag);										
+														
+													}
+
+													for (var i=0; i<userDetailsName.length; i++){
+
+														addNapsiteDetail(userDetailsName[i],userDetailsValue[i]);
+
+													}
+
+												}
+
+													
+											})
+
+
+										})
+									}else{
+										if (userViewList.length>0){
+												for(var i=0; i<userViewList.length; i++){
+													userDetailsCover.removeChild(userViewList[i]);
+												}
+												userViewList=[];
+											}
+										if (viewList.length>0){
+											for(var i=0; i<viewList.length; i++){
+												searchResult.removeChild(viewList[i]);
+											}
+											viewList=[];
+										}
+										if (searchBar.value.length>0){
+											
+											var p= document.createElement("p");
+											p.appendChild(document.createTextNode(`No Napsite posses the info of ${searchMethod.value} you entered`));
+											p.style.color="red";
+											p.style.fontSize="1rem";
+											p.style.fontWeight="bold";
+											p.style.fontFamily="monospace";
+											p.style.fontStyle="italic";
+											searchResult.appendChild(p);
+											viewList=viewList.concat(p);
+										}
+										
+
+									}
+									
+
+								})
+
+
+							}
+							else{
+								adminSection.style.display="none";
+							}
+							function initializeUserDetails (newNapsite){
+								var userDetailsValue = [newNapsite.FirstName,newNapsite.MiddleName,newNapsite.LastName,newNapsite.UserName,Napsite.MatricNo,
+										newNapsite.Gender,newNapsite.Level,newNapsite.DateOfBirth,newNapsite.HallAllocated,
+										newNapsite.ContactNumber,newNapsite.OtherContactNumber,newNapsite.CurrentAddress,
+										newNapsite.SchoolEmail,newNapsite.OtherEmail,newNapsite.ParentGuardianName,
+										newNapsite.ParentGuardianAddress,newNapsite.ParentGuardianContact,
+										newNapsite.ParentGuardianOtherContact];
+
+								return userDetailsValue;
+							}
+							var userDetailsValue = initializeUserDetails(Napsite);
 							var userDetailsName = ["First Name: ","Middle Name: ","Last Name: ","UserName: ","Matric No: ","Gender: ","Level: ",
 												"Date Of Birth: ","Hall Allocated: ","Contact Number: ","Other Contact Number: ","Current Address: ",
 												"School Email: ","Email: ","Parent/Guardian Name: ","Parent/Guardian Address: ",
@@ -307,12 +647,12 @@ async function inspectLoginDetails(){
 												'Content-Type': 'application/json'
 											}
 										};
-										console.log("started dashboard");
+										
 										const response2= await fetch("/NapsDetails", opts1);
 										const User = await response2.json();
 										console.log(User.newDetails);
 										Napsite = User.newDetails;
-										console.log(Napsite);
+										
 										removePreviousDetails(editNewList);
 										userDetailsValue = [Napsite.FirstName,Napsite.MiddleName,Napsite.LastName,Napsite.UserName,Napsite.MatricNo,
 																Napsite.Gender,Napsite.Level,Napsite.DateOfBirth,Napsite.HallAllocated,
