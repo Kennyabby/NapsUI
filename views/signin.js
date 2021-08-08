@@ -235,7 +235,7 @@ async function inspectLoginDetails(){
 										
 										Users.forEach( (user) => {
 											
-											if (user.UserName.toLowerCase().includes(searchBar.value)){
+											if (user.UserName.toLowerCase().includes(searchBar.value.toLowerCase())){
 												
 												userWithUserNameList=userWithUserNameList.concat(user);
 
@@ -308,9 +308,9 @@ async function inspectLoginDetails(){
 
 										
 										Users.forEach( (user) => {
-											console.log([user.LastName+" "+user.FirstName+" "+user.MiddleName].toString())
+											// console.log([user.LastName+" "+user.FirstName+" "+user.MiddleName].toString())
 											if ([user.LastName+" "+user.FirstName+" "+user.MiddleName]
-												.toString().toLowerCase().includes(searchBar.value)){
+												.toString().toLowerCase().includes(searchBar.value.toLowerCase())){
 												
 												userWithNameList=userWithNameList.concat(user);
 												isSearchFound=true;
