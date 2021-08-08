@@ -7,10 +7,12 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 var newUser;
+var userUpdate;
 var userDetails;
 var details;
 var matList =[];
 var createdStatus=false;
+var updatedStatus=false;
 
 
 app.listen(process.env.PORT || 3000,()=>{
@@ -69,6 +71,21 @@ app.post('/Registeration_Status',async (req, res) =>{
 	});
 	
 })
+app.post('/ProfileUpdate',async (req, res) =>{
+	console.log("got request for profile update");
+	userUpdate = await req.body;
+
+
+	await main("updateOneUser").catch(console.error).then(()=>{
+		console.log("in the main function");
+		res.json({
+
+			sts: updatedStatus
+
+		});
+	});
+	
+})
 
 app.post('/LoginDetails',async (req, res) =>{
 	// console.log("got the request for LoginDetails");
@@ -107,7 +124,8 @@ app.post('/NapsDetails',async (req, res) =>{
 	
 	await res.json({
 
-		details: userDetails
+		details: userDetails,
+		newDetails:userUpdate
 
 	});
  
@@ -130,6 +148,9 @@ async function main(action){
 		if (action==="LoginDetails"){
 
 			await findDetails(client,"LoginDetails").catch(console.error);
+		}
+		if (action==="updateOneUser"){
+			await updateListing(client,userUpdate.MatricNo,userUpdate).catch(console.error);
 		}
 		
 	}catch (e){
@@ -159,6 +180,13 @@ async function main(action){
 		details = await result.toArray();
 		
 	};
+	async function updateListing(client, matricNo, updatedListing) {
+
+		const result = await client.db("napsui").collection("NapsDatabase").updateOne({ MatricNo: matricNo }, { $set: updatedListing });
+       	updatedStatus=true;
+    	// console.log(details1);
+    	// console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+    };
 }
 
 

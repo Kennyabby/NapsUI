@@ -20,8 +20,14 @@ var dashSection = document.getElementById("dashSection");
 var votingSection = document.getElementById("votingSection");
 var discussionSection = document.getElementById("discussionSection");
 var adminSection = document.getElementById("adminSection");
-// var dashSectionDiv = document.getElementById("dashSection-div");
-// var profileDiv = document.getElementById("profile-div");
+var profileIdentifier = document.getElementById("profile-identifier");
+var imageCover = document.getElementById("image-cover");
+var detailsCover = document.getElementById("details-cover");
+var editDiv = document.getElementById("edit-div");
+var saveDiv = document.getElementById("save-div");
+var editList=[];
+var editTagList=[];
+var editNewList=[];
 var sideList= [profile,notifications,events,tasks,settings];
 var topList= [dashSection,votingSection,discussionSection,adminSection];
 var optionList = [profile,notifications,events,tasks,settings,dashSection,votingSection,discussionSection,adminSection];
@@ -40,6 +46,7 @@ var countKeys=0;
 var isKeyPresent=false;
 var userIndex;
 var detaisSent=false;
+var isEditProfile=false;
 forgot.addEventListener("mousedown", function(){
 	forgot.style.boxShadow="4px 4px 5px black";
 	forgot.style.border="solid #0000ff33 3px";
@@ -109,7 +116,7 @@ async function inspectLoginDetails(){
 							console.log("started dashboard");
 							const response2= await fetch("/NapsDetails", opts1);
 							const User = await response2.json();
-							const Napsite = await User.details;
+							var Napsite = await User.details;
 							console.log(Napsite);
 							if (Napsite.Gender==="Male") {
 
@@ -142,7 +149,227 @@ async function inspectLoginDetails(){
 							logSection.appendChild(spanTag);
 							logSection.appendChild(dropTag);
 							
+							var profileName = document.createElement("p");
+							profileName.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
+							profileName.style.marginLeft="50px";
+							profileName.style.marginTop="50px";
+							profileIdentifier.appendChild(profileName);
 
+							var userName = document.createElement("p");
+							userName.appendChild(document.createTextNode(`${Napsite.UserName}`));
+							userName.style.position="absolute";
+							userName.style.right="30px";
+							userName.style.fontSize="1.5rem";
+							// userName.style.fontWeight="bold";
+							userName.style.fontStyle="italic";
+							userName.style.bottom="10px";
+							imageCover.appendChild(userName);
+
+							if (Napsite.Admin==="positive"){
+								var admin = document.createElement("p");
+								admin.appendChild(document.createTextNode("Admin"));
+								admin.style.position="absolute";
+								admin.style.left="90px";
+								admin.style.fontSize="1.5rem";
+								// userName.style.fontWeight="bold";
+								admin.style.fontStyle="italic";
+								admin.style.bottom="3px";
+								imageCover.appendChild(admin);
+							}
+
+							var userDetailsValue = [Napsite.FirstName,Napsite.MiddleName,Napsite.LastName,Napsite.UserName,Napsite.MatricNo,
+										Napsite.Gender,Napsite.Level,Napsite.DateOfBirth,Napsite.HallAllocated,
+										Napsite.ContactNumber,Napsite.OtherContactNumber,Napsite.CurrentAddress,
+										Napsite.SchoolEmail,Napsite.OtherEmail,Napsite.ParentGuardianName,
+										Napsite.ParentGuardianAddress,Napsite.ParentGuardianContact,
+										Napsite.ParentGuardianOtherContact];
+							var userDetailsName = ["First Name: ","Middle Name: ","Last Name: ","UserName: ","Matric No: ","Gender: ","Level: ",
+												"Date Of Birth: ","Hall Allocated: ","Contact Number: ","Other Contact Number: ","Current Address: ",
+												"School Email: ","Email: ","Parent/Guardian Name: ","Parent/Guardian Address: ",
+												"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
+							
+							function addNapsiteDetail(napsiteName,napsiteValue){
+
+								var napsdiv = document.createElement("div");
+								napsdiv.style.display="inline-flex";
+								var nameTag = document.createElement("span");
+								var valueTag = document.createElement("span");
+								valueTag.style.marginLeft="30px";
+								nameTag.appendChild(document.createTextNode(`${napsiteName}`));
+								valueTag.appendChild(document.createTextNode(`${napsiteValue}`));
+								nameTag.style.fontWeight="bold";
+								nameTag.style.fontSize="1.5rem";
+								valueTag.style.fontStyle="italic";
+								nameTag.style.fontFamily="monospace"
+								valueTag.style.fontSize="1.5rem";
+								napsdiv.appendChild(nameTag);
+								napsdiv.appendChild(valueTag);
+								var spaceTag = document.createElement("p");
+								spaceTag.appendChild(napsdiv);
+								spaceTag.style.marginBottom="50px";
+								detailsCover.appendChild(spaceTag);
+								
+								editList = editList.concat(spaceTag);
+
+							}
+
+							function removePreviousDetails(list){
+								console.log(list);
+								for (var i=0; i<list.length; i++){
+
+									detailsCover.removeChild(list[i]);
+								}
+								
+							}
+
+							function editProfile(napsiteName,napsiteValue){
+
+								editTag = document.createElement("input");
+								if (napsiteName==="Matric No: " || napsiteName==="School Email: "){
+									editTag.disabled=true;
+								}else{
+
+									var napsdiv = document.createElement("div");
+									napsdiv.style.display="inline-flex";
+									var nameTag = document.createElement("span");									
+									editTag.style.marginLeft="30px";
+									editTag.type = "text";
+									editTag.value= napsiteValue;
+									nameTag.appendChild(document.createTextNode(`${napsiteName}`));
+									nameTag.style.fontWeight="bold";
+									nameTag.style.fontFamily="monospace"
+									nameTag.style.fontSize="1.5rem";
+									editTag.style.fontStyle="italic";
+									editTag.style.fontSize="1.5rem";
+									napsdiv.appendChild(nameTag);
+									napsdiv.appendChild(editTag);
+									var spaceTag = document.createElement("p");
+									
+									spaceTag.appendChild(napsdiv);
+									spaceTag.style.marginBottom="50px";
+
+									editNewList = editNewList.concat(spaceTag);
+									detailsCover.appendChild(spaceTag);
+									editTagList = editTagList.concat(editTag);
+								}
+								
+							}
+
+							for (var i=0; i<userDetailsName.length; i++){
+
+								addNapsiteDetail(userDetailsName[i],userDetailsValue[i]);
+
+							}
+
+							async function updateProfile(){
+
+								const user = {
+
+									FirstName: editTagList[0].value,
+									MiddleName:editTagList[1].value,
+									LastName: editTagList[2].value,
+									UserName: editTagList[3].value,
+									MatricNo: userDetailsValue[4],
+									Gender:editTagList[4].value,
+									Level: editTagList[5].value,
+									DateOfBirth: editTagList[6].value,
+									HallAllocated: editTagList[7].value,
+									ContactNumber: editTagList[8].value,
+									OtherContactNumber: editTagList[9].value,
+									CurrentAddress: editTagList[10].value,
+									SchoolEmail: userDetailsValue[12],
+									OtherEmail: editTagList[11].value,
+									ParentGuardianName: editTagList[12].value,
+									ParentGuardianAddress: editTagList[13].value,
+									ParentGuardianContact: editTagList[14].value,
+									ParentGuardianOtherContact: editTagList[15].value,
+									
+								}
+
+								const options = {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: JSON.stringify(user)
+								};
+
+								try{
+									const response1 = await fetch('/ProfileUpdate', options);	
+									const json = await response1.json();	
+									proceed = json.sts;
+									
+									if (proceed===true){
+										
+										const opts1 = {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json'
+											}
+										};
+										console.log("started dashboard");
+										const response2= await fetch("/NapsDetails", opts1);
+										const User = await response2.json();
+										console.log(User.newDetails);
+										Napsite = User.newDetails;
+										console.log(Napsite);
+										removePreviousDetails(editNewList);
+										userDetailsValue = [Napsite.FirstName,Napsite.MiddleName,Napsite.LastName,Napsite.UserName,Napsite.MatricNo,
+																Napsite.Gender,Napsite.Level,Napsite.DateOfBirth,Napsite.HallAllocated,
+																Napsite.ContactNumber,Napsite.OtherContactNumber,Napsite.CurrentAddress,
+																Napsite.SchoolEmail,Napsite.OtherEmail,Napsite.ParentGuardianName,
+																Napsite.ParentGuardianAddress,Napsite.ParentGuardianContact,
+																Napsite.ParentGuardianOtherContact];
+										console.log(userDetailsValue[7]);
+										for (var i=0; i<userDetailsName.length; i++){
+
+											addNapsiteDetail(userDetailsName[i],userDetailsValue[i]);
+
+										}
+										
+									}else{
+
+										throw (TypeError);
+									}
+								}catch (TypeError){
+									
+									// waitCover.style.display="none";
+									// error.innerHTML="Could not Connect to Server. Check your internet Connection, or Contact the administrator at Zerox.com";
+									// again.style.display="";
+									// goBack.style.display="";
+									// errorCover.style.display="inline-block";
+									// console.log("Error 404 page not found!!!");
+								}
+
+							}
+							
+							editDiv.addEventListener("click", () => {
+
+								removePreviousDetails(editList);
+								
+								for (var i=0; i<userDetailsName.length; i++){
+
+									editProfile(userDetailsName[i],userDetailsValue[i]);
+
+								}
+
+								editList=[];
+								editDiv.style.display="none";
+								saveDiv.style.display="inline-flex";
+
+
+
+							});
+
+							saveDiv.addEventListener("click", async ()=> {
+
+								await updateProfile();
+								editTagList=[];
+								editNewList=[];
+								editDiv.style.display="inline-flex";
+								saveDiv.style.display="none";
+								window.open("/NapsPage","_self");
+							})
 
 							function shuffle(array) {
 							  var currentIndex = array.length,  randomIndex;
