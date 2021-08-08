@@ -224,7 +224,7 @@ body {
   vertical-align: top;
   cursor: pointer;
   top:3px;
-  right:10px;
+  right:8px;
   font-family: calibri;
   font-weight: bold;
   background-color: white;
@@ -247,7 +247,7 @@ body {
   height: 500px;
   padding: 25px;
   margin: 25px;
-  margin-top: 100px;
+  margin-top: 80px;
   border: solid black 1px;
   box-shadow: 6px 6px 7px black;
 
@@ -320,7 +320,7 @@ body {
   padding: 6px;
   margin: 0px;
   margin-bottom: 30px;
-  margin-right: 10px;
+  margin-left: 10px;
   cursor: pointer;
 }
 .next{
