@@ -29,6 +29,16 @@ var saveDiv = document.getElementById("save-div");
 var searchMethod = document.getElementById("search-method");
 var searchBar = document.getElementById("search-bar");
 var sortSearch = document.getElementById("sort-search");
+var firstContent= document.getElementById("first-content");
+var side = document.getElementById("side");
+var sideBar = document.getElementById("side-bar");
+var imgComp = document.getElementById("imgComp");
+var profileComp = document.getElementById("profileComp");
+var notificationsComp = document.getElementById("notificationsComp");
+var eventsComp = document.getElementById("eventsComp");
+var tasksComp = document.getElementById("tasksComp");
+var settingsComp = document.getElementById("settingsComp");
+var compList = [imgComp,profileComp,notificationsComp,tasksComp,settingsComp];
 var sortMethodList=["Sort By","100","200","300",
 					"400","Male","Female","Others"];
 var searchMethodList=["User Name","Matric No","Name"];
@@ -37,6 +47,7 @@ var editTagList=[];
 var editNewList=[];
 var viewList=[];
 var userViewList=[];
+var optList=[];
 var sideList= [profile,notifications,events,tasks,settings];
 var topList= [dashSection,votingSection,discussionSection,adminSection];
 var optionList = [profile,notifications,events,tasks,settings,dashSection,votingSection,discussionSection,adminSection];
@@ -52,10 +63,20 @@ var nt= document.getElementById("next-img");
 var pv= document.getElementById("prev-img")
 var searchResult = document.getElementById("search-result");
 var resultView = document.getElementById("result-view");
+var profileName = document.createElement("p");
+var userName = document.createElement("p");
+var admin = document.createElement("p");
+var napsdiv = document.createElement("div");
+var nameTag = document.createElement("span");
+var valueTag = document.createElement("span");
+
 var count=0;
 var countKeys=0;
+var loopCount=0;
+var loopCount1=0;
 var isKeyPresent=false;
 var userIndex;
+var side1 = document.createElement("div");;
 var detaisSent=false;
 var isEditProfile=false;
 forgot.addEventListener("mousedown", function(){
@@ -86,6 +107,7 @@ async function inspectLoginDetails(){
 	const response= await fetch("/LoginDetails", opts);
 	const LoginDetails = await response.json();
 	const userList = await LoginDetails.detailsList;
+	
 	userList.forEach (async (user) => {
 		
 		if (user.SchoolEmail===inputEmail.value && user.Password===inputPassword.value){
@@ -117,7 +139,7 @@ async function inspectLoginDetails(){
 					document.body.style.backgroundImage = "";
 					async function loadDashboard(){
 
-						try{
+						try {
 							const opts1 = {
 								method: 'POST',
 								headers: {
@@ -143,6 +165,148 @@ async function inspectLoginDetails(){
 
 							}
 
+							var optImg = document.createElement("img");
+							optImg.className="options";
+							optImg.src="view.jpg";		
+							var imgClick=0;
+							optImg.addEventListener("click", () =>  {
+
+								imgClick++;
+								if (imgClick==1){
+									if (optList.length>0){
+										for (var i=0; i<optList.length; i++){
+											side1.removeChild(optList[i]);
+										}
+									}
+									optList=[];		
+									side1.appendChild(optImg);				
+									side1.appendChild(sideBar);
+									optList = optList.concat(optImg);
+									optList = optList.concat(sideBar);
+									side1.style.backgroundColor="#000000aa";
+									
+								}else{
+
+									if (optList.length>0){
+									for (var i=0; i<optList.length; i++){
+											side1.removeChild(optList[i]);
+										}
+									}
+									optList=[];		
+									side1.appendChild(optImg);				
+									optList = optList.concat(optImg);
+									
+									side1.style.backgroundColor="#00000000";
+									imgClick=0;
+									
+
+								}
+
+								
+							})	
+
+							side1.className="side1";	
+							if (optList.length>0){
+								for (var i=0; i<optList.length; i++){
+									side1.removeChild(optList[i]);
+								}
+							}
+							optList=[];						
+							side1.appendChild(sideBar);
+							optList = optList.concat(sideBar);
+							side1.style.backgroundColor="black";
+							firstContent.appendChild(side1);	
+							var x = window.matchMedia("(max-width: 750px)");
+							function widthChangeEffect(x,nTag,vTag){
+								if (x.matches){
+									console.log("matched");
+									userName.style.right="20px";
+									userName.style.fontSize="1rem";
+									userName.style.bottom="8px";
+									// imageCover.removeChild(userName);
+									// imageCover.appendChild(userName);
+
+									admin.style.left="45px";
+									admin.style.fontSize="1rem";
+									admin.style.bottom="3px";
+									// imageCover.removeChild(admin);
+									// imageCover.appendChild(admin);
+
+									profileName.style.marginLeft="25px";
+									profileName.style.marginTop="25px";
+									// profileIdentifier.removeChild(profileName);
+									// profileIdentifier.appendChild(profileName);
+
+									nTag.style.fontSize="1rem";
+									vTag.style.fontSize="1rem";
+									vTag.style.marginLeft="15px";
+									// napsdiv.removeChild(nameTag);
+									// napsdiv.removeChild(valueTag);
+									// napsdiv.appendChild(nameTag);
+									// napsdiv.appendChild(valueTag);														
+									if (optList.length>0){
+										for (var i=0; i<optList.length; i++){
+											side1.removeChild(optList[i]);
+										}
+									}
+									optList=[];		
+									side1.style.backgroundColor="#00000000";
+									side1.appendChild(optImg);
+									
+									optList = optList.concat(optImg);
+									
+									// firstContent.removeChild(side1);
+									// firstContent.appendChild(side1);									
+									
+									
+
+								}else{
+									console.log("doesn't match");
+									userName.style.right="30px";
+									userName.style.fontSize="1.5rem";
+									userName.style.bottom="10px";
+									// imageCover.removeChild(userName);
+									// imageCover.appendChild(userName);
+
+									admin.style.left="90px";
+									admin.style.fontSize="1.5rem";
+									admin.style.bottom="3px";
+									// imageCover.removeChild(admin);
+									// imageCover.appendChild(admin);
+
+									profileName.style.marginLeft="50px";
+									profileName.style.marginTop="50px";
+									// profileIdentifier.removeChild(profileName);
+									// profileIdentifier.appendChild(profileName);
+
+									nameTag.style.fontSize="1.5rem";
+									valueTag.style.fontSize="1.5rem";
+									valueTag.style.marginLeft="30px";
+									// napsdiv.removeChild(nameTag);
+									// napsdiv.removeChild(valueTag);
+									// napsdiv.appendChild(nameTag);
+									// napsdiv.appendChild(valueTag);
+									
+									if (optList.length>0){
+										for (var i=0; i<optList.length; i++){
+											side1.removeChild(optList[i]);
+										}
+									}
+									optList=[];		
+									side1.style.backgroundColor="black";
+									
+									side1.appendChild(sideBar);
+									
+									optList = optList.concat(sideBar);											
+									
+									// firstContent.removeChild(side1);
+									// firstContent.appendChild(side1);
+									
+								}
+
+							}
+								
+							x.addListener(widthChangeEffect);	
 							profImg.src="profile-img.png"
 							var spanTag = document.createElement("p");
 							// spanTag.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
@@ -160,13 +324,13 @@ async function inspectLoginDetails(){
 							logSection.appendChild(spanTag);
 							logSection.appendChild(dropTag);
 							
-							var profileName = document.createElement("p");
+							
 							profileName.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
 							profileName.style.marginLeft="50px";
 							profileName.style.marginTop="50px";
 							profileIdentifier.appendChild(profileName);
 
-							var userName = document.createElement("p");
+							
 							userName.appendChild(document.createTextNode(`${Napsite.UserName}`));
 							userName.style.position="absolute";
 							userName.style.right="30px";
@@ -179,7 +343,7 @@ async function inspectLoginDetails(){
 							if (Napsite.Admin==="positive"){
 
 								adminSection.style.display="";
-								var admin = document.createElement("p");
+								
 								admin.appendChild(document.createTextNode("Admin"));
 								admin.style.position="absolute";
 								admin.style.left="90px";
@@ -439,11 +603,10 @@ async function inspectLoginDetails(){
 														"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
 													var userDetailsValue = initializeUserDetails(user);
 													function addNapsiteDetail(napsiteName,napsiteValue){
-
 														var napsdiv = document.createElement("div");
-														napsdiv.style.display="inline-flex";
 														var nameTag = document.createElement("span");
 														var valueTag = document.createElement("span");
+														napsdiv.style.display="inline-flex";														
 														valueTag.style.marginLeft="30px";
 														nameTag.appendChild(document.createTextNode(`${napsiteName}`));
 														valueTag.appendChild(document.createTextNode(`${napsiteValue}`));
@@ -454,6 +617,7 @@ async function inspectLoginDetails(){
 														valueTag.style.fontSize="1.5rem";
 														napsdiv.appendChild(nameTag);
 														napsdiv.appendChild(valueTag);
+														widthChangeEffect(x,nameTag,valueTag);
 														var spaceTag = document.createElement("p");
 														spaceTag.appendChild(napsdiv);
 														spaceTag.style.marginBottom="50px";
@@ -529,11 +693,11 @@ async function inspectLoginDetails(){
 												"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
 							
 							function addNapsiteDetail(napsiteName,napsiteValue){
-
+								
 								var napsdiv = document.createElement("div");
-								napsdiv.style.display="inline-flex";
 								var nameTag = document.createElement("span");
 								var valueTag = document.createElement("span");
+								napsdiv.style.display="inline-flex";								
 								valueTag.style.marginLeft="30px";
 								nameTag.appendChild(document.createTextNode(`${napsiteName}`));
 								valueTag.appendChild(document.createTextNode(`${napsiteValue}`));
@@ -546,12 +710,21 @@ async function inspectLoginDetails(){
 								napsdiv.appendChild(valueTag);
 								var spaceTag = document.createElement("p");
 								spaceTag.appendChild(napsdiv);
+
+								// console.log(spaceTag);
 								spaceTag.style.marginBottom="50px";
 								detailsCover.appendChild(spaceTag);
-								
-								editList = editList.concat(spaceTag);
-
+								widthChangeEffect(x,nameTag,valueTag);
+								// x.addListener(widthChangeEffect);
+								console.log(valueTag.style.fontSize);
+								editList = editList.concat(spaceTag);														
+								// loopCount++;
+								// if (loopCount===1){					
+																													
+									
+								// }
 							}
+							// console.log(sideBar.childNodes[2]);
 
 							function removePreviousDetails(list){
 								console.log(list);
@@ -564,14 +737,15 @@ async function inspectLoginDetails(){
 
 							function editProfile(napsiteName,napsiteValue){
 
-								editTag = document.createElement("input");
+								var editTag = document.createElement("input");
 								if (napsiteName==="Matric No: " || napsiteName==="School Email: "){
 									editTag.disabled=true;
 								}else{
-
 									var napsdiv = document.createElement("div");
+									var nameTag = document.createElement("span");
+									
 									napsdiv.style.display="inline-flex";
-									var nameTag = document.createElement("span");									
+																		
 									editTag.style.marginLeft="30px";
 									editTag.type = "text";
 									editTag.value= napsiteValue;
@@ -590,6 +764,7 @@ async function inspectLoginDetails(){
 
 									editNewList = editNewList.concat(spaceTag);
 									detailsCover.appendChild(spaceTag);
+									widthChangeEffect(x,nameTag,editTag);
 									editTagList = editTagList.concat(editTag);
 								}
 								
@@ -600,7 +775,8 @@ async function inspectLoginDetails(){
 								addNapsiteDetail(userDetailsName[i],userDetailsValue[i]);
 
 							}
-
+							widthChangeEffect(x,nameTag,valueTag);
+							// x.addListener(widthChangeEffect);
 							async function updateProfile(){
 
 								const user = {
