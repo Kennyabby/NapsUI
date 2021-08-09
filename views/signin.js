@@ -529,17 +529,20 @@ async function inspectLoginDetails(){
 											var label = document.createElement("label");
 											var label1 = document.createElement("label");
 											label1.appendChild(document.createTextNode(`${user.UserName}`));
-											label1.style.fontSize="1.2rem";
+											label1.style.fontSize="1rem";
 											label1.style.fontWeight="bold";
 											label1.style.color="white";
 											label1.style.fontStyle="italic";
 											label1.style.position="absolute";
 											label1.style.bottom="25px";
-											label1.style.right="15px";
+											label1.style.right="25px";
 											label1.style.cursor="pointer";
 
 											label.appendChild(document.createTextNode(`${user.LastName} ${user.FirstName} ${user.MiddleName}`))
-											label.style.fontSize="1.5rem";
+											label.style.fontSize="1.2rem";
+											label.style.position="absolute";
+											label.style.top="25px";
+											label.style.right="30px";
 											label.style.fontWeight="bold"
 											label.style.color="white";
 											label.style.cursor="pointer";
