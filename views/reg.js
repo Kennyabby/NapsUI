@@ -22,7 +22,7 @@ var inputParentName = document.getElementById("inputParentName");
 var inputBirthday = document.getElementById("inputBirthday");
 var inputMatricNo = document.getElementById("inputMatricNo");
 var inputSchoolEmail = document.getElementById("inputSchoolEmail");
-inputSchoolEmail.disabled=true;
+// inputSchoolEmail.disabled=true;
 var inputEmail = document.getElementById("inputEmail");
 var inputContact = document.getElementById("inputContact");
 var inputOtherContact = document.getElementById("inputOtherContact");
@@ -39,14 +39,14 @@ var hallList = ["MELLANBY", "TEDDER", "KUTI", "SULTAN BELLO", "QUEEN ELIZABETH I
 var toggleMale = document.getElementById("male");
 var toggleFemale = document.getElementById("female");
 var toggleOthers = document.getElementById("others");
-var GenderValue = toggleOthers;
+var GenderValue = toggleMale;
 var inputList = [inputFirstName, inputMiddleName, inputLastName, inputUserName, GenderValue, inputBirthday, inputLevel, inputHall, 
 inputMatricNo, inputSchoolEmail, inputEmail, inputContact, inputOtherContact, inputAddress, 
 inputParentName, inputParentContact, inputParentOtherContact, inputParentAddress,inputPassword, inputConfirmPassword]
 var toggleMale = document.getElementById("male");
 var toggleFemale = document.getElementById("female");
 var toggleOthers = document.getElementById("others");
-var GenderValue = toggleOthers;
+var GenderValue = toggleMale;
 var basicLabel = document.getElementById("basic");
 var schoolLabel = document.getElementById("school");
 var contLabel = document.getElementById("cont");
@@ -92,7 +92,7 @@ function toggleTo(choice){
 
 	toggleMale.checked=false;
 	toggleFemale.checked=false;
-	toggleOthers.checked=false;
+	// toggleOthers.checked=false;
 	choice.checked=true;
 	GenderValue = choice;
 	inputList[4]= GenderValue;
@@ -109,10 +109,10 @@ toggleFemale.addEventListener("click", function(){
 	toggleTo(this);
 });
 
-toggleOthers.addEventListener("click", function(){
+// toggleOthers.addEventListener("click", function(){
 
-	toggleTo(this);
-});
+// 	toggleTo(this);
+// });
 
 function displayUserData(){
 
@@ -121,7 +121,7 @@ function displayUserData(){
 	}
 	var prefix = inputFirstName.value[0].toLowerCase()+
 	inputLastName.value.toLowerCase()+inputMatricNo.value.slice(-3);
-	inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
+	// inputSchoolEmail.value=prefix+"@stu.ui.edu.ng";
 	inputList.forEach(function(val){
 
 		if (val===inputPassword || val===inputConfirmPassword){
@@ -182,6 +182,7 @@ function focus(input){
 function addInputsFocusListener(){
 
 	inputList.forEach(function(input){
+		console.log(input);
 		input.addEventListener("click",function(){
 			focus(input);
 		});	
@@ -192,9 +193,9 @@ function addInputsFocusListener(){
 addInputsFocusListener();
 focus(inputFirstName);
 
-// var option = document.createElement("option");
-// option.appendChild(document.createTextNode(""));
-// inputLevel.appendChild(option);
+var option = document.createElement("option");
+option.appendChild(document.createTextNode(""));
+inputLevel.appendChild(option);
 for(var i=0; i<4; i++){
 
 	var option = document.createElement("option");

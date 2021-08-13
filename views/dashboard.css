@@ -321,6 +321,19 @@ body {
   margin: 0px;
  
 }
+.image-options{
+  position: absolute;
+  bottom: 10px;
+  left: 160px;
+  height:40px;
+  width:40px;
+  background-color: #1111ff99;
+  border-radius: 50px;
+  padding: 1px;
+  margin: 0px;
+  cursor: pointer;
+ 
+}
 .profile-identifier{
   position: absolute;
   text-align: center;
@@ -596,6 +609,19 @@ body {
   border-radius: 50px;
   padding: 6px;
   margin: 0px;
+ 
+}
+.image-options{
+  position: absolute;
+  bottom: 85px;
+  left: 75px;
+  height:30px;
+  width:30px;
+  background-color: #1111ff99;
+  border-radius: 50px;
+  padding: 1px;
+  margin: 0px;
+  cursor: pointer;
  
 }
 .details-cover{

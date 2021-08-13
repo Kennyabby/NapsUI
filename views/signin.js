@@ -25,6 +25,7 @@ var imageCover = document.getElementById("image-cover");
 var detailsCover = document.getElementById("details-cover");
 var userDetailsCover = document.getElementById("userdetails-cover");
 var editDiv = document.getElementById("edit-div");
+editDiv.style.display="none";
 var saveDiv = document.getElementById("save-div");
 var searchMethod = document.getElementById("search-method");
 var searchBar = document.getElementById("search-bar");
@@ -48,16 +49,16 @@ var editNewList=[];
 var viewList=[];
 var userViewList=[];
 var optList=[];
+var userDetailsValue1 = [];
 var sideList= [profile,notifications,events,tasks,settings];
 var topList= [dashSection,votingSection,discussionSection,adminSection];
 var optionList = [profile,notifications,events,tasks,settings,dashSection,votingSection,discussionSection,adminSection];
 var imgList= ["403105.jpg","9UsWBvm4ScyGW7QOn2yz_20190122-Is-space-time-a-quantum-code-Featured.jpg",
 				"12977115_1153710794652906_1138676803864315944_o.jpg","163-1631522_space-time-curvature-wall-paper.jpg",
-				"464714_589563021067689_1857773835_o.jpg","912712.jpg","981407_589561937734464_29963629_o.jpg",
+				"464714_589563021067689_1857773835_o.jpg","981407_589561937734464_29963629_o.jpg",
 				"depositphotos_55976909-stock-photo-advance-of-fractal-realms.jpg","9UsWBvm4ScyGW7QOn2yz_20190122-Is-space-time-a-quantum-code-Featured.jpg",
-				"First-Signs-of-Weird-Quantum-Property-of-Empty-Space-750x300-1280x720.jpg","formula-math-mathematics-physics-wallpaper-preview.jpg",
-				"howeinsteins.jpg","howstrongisg.jpg","iStock-941621770.jpg","kgWYUo.png","Mysteriously-Shrinking-Proton-Continues-to-Puzzle-Physicists.jpg",
-				"N07LKc.png","Plasma_590x300.jpg","Spacetime_I_edit.jpg"];
+				"formula-math-mathematics-physics-wallpaper-preview.jpg","howeinsteins.jpg","iStock-941621770.jpg","kgWYUo.png","Mysteriously-Shrinking-Proton-Continues-to-Puzzle-Physicists.jpg",
+				"N07LKc.png","Plasma_590x300.jpg"];
 var imgFlow= document.getElementById("img-flow");
 var nt= document.getElementById("next-img");
 var pv= document.getElementById("prev-img")
@@ -114,6 +115,8 @@ async function inspectLoginDetails(){
 			// console.log(user.SchoolEmail);
 			// inputEmail.value="";
 			// inputPassword.value="";
+			inputPasswordTip.style.display="none";
+			inputEmailAddressTip.style.display="none";
 			sessionStorage.setItem("user-email",inputEmail.value);
 			sessionStorage.setItem("user-password",inputPassword.value);
 			userIndex=userList.indexOf(user);
@@ -374,7 +377,7 @@ async function inspectLoginDetails(){
 								})
 
 								searchBar.addEventListener("input", async () =>{
-
+									editDiv.style.display="none"
 									var isSearchFound=false;
 									var userWithUserNameList=[];
 									var userWithUserNameAndSortList=[];
@@ -559,9 +562,9 @@ async function inspectLoginDetails(){
 											viewList=viewList.concat(userView);
 
 											userView.addEventListener("click", () =>{
-
+												editDiv.style.display="inline-flex";
 												if (userView.childNodes[2].innerHTML===Napsite.UserName){
-													
+													editDiv.style.display="none";
 													sideList.forEach((side)=>{
 
 														if (side===profile){
@@ -604,8 +607,10 @@ async function inspectLoginDetails(){
 														"Date Of Birth: ","Hall Allocated: ","Contact Number: ","Other Contact Number: ","Current Address: ",
 														"School Email: ","Email: ","Parent/Guardian Name: ","Parent/Guardian Address: ",
 														"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
-													var userDetailsValue = initializeUserDetails(user);
-													function addNapsiteDetail(napsiteName,napsiteValue){
+													userDetailsValue1 = initializeUserDetails(user);
+
+													function addNapsiteDetail1(napsiteName,napsiteValue){
+														
 														var napsdiv = document.createElement("div");
 														var nameTag = document.createElement("span");
 														var valueTag = document.createElement("span");
@@ -624,16 +629,51 @@ async function inspectLoginDetails(){
 														var spaceTag = document.createElement("p");
 														spaceTag.appendChild(napsdiv);
 														spaceTag.style.marginBottom="50px";
-														userDetailsCover.appendChild(spaceTag);	
-														userViewList =userViewList.concat(spaceTag);										
+														userDetailsCover.appendChild(spaceTag);
+														
+														userViewList = userViewList.concat(spaceTag);										
 														
 													}
 
 													for (var i=0; i<userDetailsName.length; i++){
 
-														addNapsiteDetail(userDetailsName[i],userDetailsValue[i]);
+														addNapsiteDetail1(userDetailsName[i],userDetailsValue1[i]);
 
 													}
+
+													editDiv.addEventListener("click", () => {
+
+														removePreviousDetails(userViewList);
+														
+														for (var i=0; i<userDetailsName.length; i++){
+
+															editProfile(userDetailsName[i],userDetailsValue1[i]);
+
+														}
+
+														userViewList=[];
+														editDiv.style.display="none";
+														saveDiv.style.display="inline-flex";
+
+
+
+													});
+
+													saveDiv.addEventListener("click", async ()=> {
+
+														await updateProfile();
+														for (var i=0; i<userDetailsName.length; i++){
+											
+															addNapsiteDetail1(userDetailsName[i],userDetailsValue1[i]);
+															
+
+														};
+														editTagList=[];
+														editNewList=[];
+														editDiv.style.display="inline-flex";
+														saveDiv.style.display="none";
+														// window.open("/NapsPage","_self");
+													})
 
 												}
 
@@ -680,7 +720,7 @@ async function inspectLoginDetails(){
 								adminSection.style.display="none";
 							}
 							function initializeUserDetails (newNapsite){
-								var userDetailsValue = [newNapsite.FirstName,newNapsite.MiddleName,newNapsite.LastName,newNapsite.UserName,Napsite.MatricNo,
+								var userDetailsValue = [newNapsite.FirstName,newNapsite.MiddleName,newNapsite.LastName,newNapsite.UserName,newNapsite.MatricNo,
 										newNapsite.Gender,newNapsite.Level,newNapsite.DateOfBirth,newNapsite.HallAllocated,
 										newNapsite.ContactNumber,newNapsite.OtherContactNumber,newNapsite.CurrentAddress,
 										newNapsite.SchoolEmail,newNapsite.OtherEmail,newNapsite.ParentGuardianName,
@@ -719,7 +759,7 @@ async function inspectLoginDetails(){
 								detailsCover.appendChild(spaceTag);
 								widthChangeEffect(x,nameTag,valueTag);
 								// x.addListener(widthChangeEffect);
-								console.log(valueTag.style.fontSize);
+								// console.log(valueTag.style.fontSize);
 								editList = editList.concat(spaceTag);														
 								// loopCount++;
 								// if (loopCount===1){					
@@ -733,7 +773,7 @@ async function inspectLoginDetails(){
 								console.log(list);
 								for (var i=0; i<list.length; i++){
 
-									detailsCover.removeChild(list[i]);
+									userDetailsCover.removeChild(list[i]);
 								}
 								
 							}
@@ -741,35 +781,31 @@ async function inspectLoginDetails(){
 							function editProfile(napsiteName,napsiteValue){
 
 								var editTag = document.createElement("input");
-								if (napsiteName==="Matric No: " || napsiteName==="School Email: "){
-									editTag.disabled=true;
-								}else{
-									var napsdiv = document.createElement("div");
+								var napsdiv = document.createElement("div");
 									var nameTag = document.createElement("span");
 									
-									napsdiv.style.display="inline-flex";
-																		
-									editTag.style.marginLeft="30px";
-									editTag.type = "text";
-									editTag.value= napsiteValue;
-									nameTag.appendChild(document.createTextNode(`${napsiteName}`));
-									nameTag.style.fontWeight="bold";
-									nameTag.style.fontFamily="monospace"
-									nameTag.style.fontSize="1.5rem";
-									editTag.style.fontStyle="italic";
-									editTag.style.fontSize="1.5rem";
-									napsdiv.appendChild(nameTag);
-									napsdiv.appendChild(editTag);
-									var spaceTag = document.createElement("p");
-									
-									spaceTag.appendChild(napsdiv);
-									spaceTag.style.marginBottom="50px";
+								napsdiv.style.display="inline-flex";
+																	
+								editTag.style.marginLeft="30px";
+								editTag.type = "text";
+								editTag.value= napsiteValue;
+								nameTag.appendChild(document.createTextNode(`${napsiteName}`));
+								nameTag.style.fontWeight="bold";
+								nameTag.style.fontFamily="monospace"
+								nameTag.style.fontSize="1.5rem";
+								editTag.style.fontStyle="italic";
+								editTag.style.fontSize="1.5rem";
+								napsdiv.appendChild(nameTag);
+								napsdiv.appendChild(editTag);
+								var spaceTag = document.createElement("p");
+								
+								spaceTag.appendChild(napsdiv);
+								spaceTag.style.marginBottom="50px";
 
-									editNewList = editNewList.concat(spaceTag);
-									detailsCover.appendChild(spaceTag);
-									widthChangeEffect(x,nameTag,editTag);
-									editTagList = editTagList.concat(editTag);
-								}
+								editNewList = editNewList.concat(spaceTag);
+								userDetailsCover.appendChild(spaceTag);
+								widthChangeEffect(x,nameTag,editTag);
+								editTagList = editTagList.concat(editTag);
 								
 							}
 
@@ -780,7 +816,7 @@ async function inspectLoginDetails(){
 							}
 							widthChangeEffect(x,nameTag,valueTag);
 							// x.addListener(widthChangeEffect);
-							async function updateProfile(){
+							async function updateProfile(newNapsite1){
 
 								const user = {
 
@@ -788,20 +824,20 @@ async function inspectLoginDetails(){
 									MiddleName:editTagList[1].value,
 									LastName: editTagList[2].value,
 									UserName: editTagList[3].value,
-									MatricNo: userDetailsValue[4],
-									Gender:editTagList[4].value,
-									Level: editTagList[5].value,
-									DateOfBirth: editTagList[6].value,
-									HallAllocated: editTagList[7].value,
-									ContactNumber: editTagList[8].value,
-									OtherContactNumber: editTagList[9].value,
-									CurrentAddress: editTagList[10].value,
-									SchoolEmail: userDetailsValue[12],
-									OtherEmail: editTagList[11].value,
-									ParentGuardianName: editTagList[12].value,
-									ParentGuardianAddress: editTagList[13].value,
-									ParentGuardianContact: editTagList[14].value,
-									ParentGuardianOtherContact: editTagList[15].value,
+									MatricNo: editTagList[4].value,
+									Gender:editTagList[5].value,
+									Level: editTagList[6].value,
+									DateOfBirth: editTagList[7].value,
+									HallAllocated: editTagList[8].value,
+									ContactNumber: editTagList[9].value,
+									OtherContactNumber: editTagList[10].value,
+									CurrentAddress: editTagList[11].value,
+									SchoolEmail: editTagList[12].value,
+									OtherEmail: editTagList[13].value,
+									ParentGuardianName: editTagList[14].value,
+									ParentGuardianAddress: editTagList[15].value,
+									ParentGuardianContact: editTagList[16].value,
+									ParentGuardianOtherContact: editTagList[17].value,
 									
 								}
 
@@ -830,21 +866,19 @@ async function inspectLoginDetails(){
 										const response2= await fetch("/NapsDetails", opts1);
 										const User = await response2.json();
 										console.log(User.newDetails);
-										Napsite = User.newDetails;
+										newNapsite1 = User.newDetails;
 										
 										removePreviousDetails(editNewList);
-										userDetailsValue = [Napsite.FirstName,Napsite.MiddleName,Napsite.LastName,Napsite.UserName,Napsite.MatricNo,
-																Napsite.Gender,Napsite.Level,Napsite.DateOfBirth,Napsite.HallAllocated,
-																Napsite.ContactNumber,Napsite.OtherContactNumber,Napsite.CurrentAddress,
-																Napsite.SchoolEmail,Napsite.OtherEmail,Napsite.ParentGuardianName,
-																Napsite.ParentGuardianAddress,Napsite.ParentGuardianContact,
-																Napsite.ParentGuardianOtherContact];
-										console.log(userDetailsValue[7]);
-										for (var i=0; i<userDetailsName.length; i++){
+										
+										userDetailsValue1 = [newNapsite1.FirstName,newNapsite1.MiddleName,newNapsite1.LastName,newNapsite1.UserName,newNapsite1.MatricNo,
+																newNapsite1.Gender,newNapsite1.Level,newNapsite1.DateOfBirth,newNapsite1.HallAllocated,
+																newNapsite1.ContactNumber,newNapsite1.OtherContactNumber,newNapsite1.CurrentAddress,
+																newNapsite1.SchoolEmail,newNapsite1.OtherEmail,newNapsite1.ParentGuardianName,
+																newNapsite1.ParentGuardianAddress,newNapsite1.ParentGuardianContact,
+																newNapsite1.ParentGuardianOtherContact];
+										// console.log(userDetailsValue[7]);
 
-											addNapsiteDetail(userDetailsName[i],userDetailsValue[i]);
-
-										}
+										
 										
 									}else{
 
@@ -862,33 +896,7 @@ async function inspectLoginDetails(){
 
 							}
 							
-							editDiv.addEventListener("click", () => {
-
-								removePreviousDetails(editList);
-								
-								for (var i=0; i<userDetailsName.length; i++){
-
-									editProfile(userDetailsName[i],userDetailsValue[i]);
-
-								}
-
-								editList=[];
-								editDiv.style.display="none";
-								saveDiv.style.display="inline-flex";
-
-
-
-							});
-
-							saveDiv.addEventListener("click", async ()=> {
-
-								await updateProfile();
-								editTagList=[];
-								editNewList=[];
-								editDiv.style.display="inline-flex";
-								saveDiv.style.display="none";
-								window.open("/NapsPage","_self");
-							})
+							
 
 							function shuffle(array) {
 							  var currentIndex = array.length,  randomIndex;
@@ -1078,7 +1086,8 @@ async function inspectLoginDetails(){
 			}
 		}else{
 
-
+			inputPasswordTip.style.display="flex";
+			inputPasswordTip.innerHTML="You have entered an invalid Email or Password!";
 		}
 	});
 	
@@ -1113,7 +1122,29 @@ sign_in.addEventListener("click", async () => {
 
 });
 
-inspectLoginDetails();
+var setDash= sessionStorage.getItem("dash_key");
+
+if (setDash!==null){
+	inspectLoginDetails();
+}
+
+inputPassword.addEventListener("keyup", function(event) {
+
+	if (event.keyCode===13){
+
+		event.preventDefault();
+		sign_in.click();
+	}
+})
+inputEmail.addEventListener("keyup", function(event) {
+
+	if (event.keyCode===13){
+
+		event.preventDefault();
+		sign_in.click();
+	}
+})
+
 inputPassword.addEventListener("input", () =>{
 	
 	if (inputPassword.value!=""){
