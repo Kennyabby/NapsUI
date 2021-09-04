@@ -42,7 +42,7 @@ var tasksComp = document.getElementById("tasksComp");
 var settingsComp = document.getElementById("settingsComp");
 var compList = [imgComp,profileComp,notificationsComp,tasksComp,settingsComp];
 var sortMethodList=["Sort By","100","200","300",
-					"400","Male","Female","Others"];
+					"400","Male","Female"];
 var searchMethodList=["User Name","Matric No","Name"];
 var editList=[];
 var editTagList=[];
@@ -392,6 +392,20 @@ async function inspectLoginDetails(){
 									const Users = await Usr.detailsList;
 									const st = sortSearch.value;
 									var c=0;
+									Users.forEach((user)=>{
+										
+										if (user.Gender==="Male" && sortSearch.value==="Male"){
+											
+											allsList=allsList.concat(user);							
+																			
+																				
+																						
+										}else if(user.Gender==="Female" && sortSearch.value==="Female"){
+											allsList=allsList.concat(user);
+										}
+
+										
+									})
 									for (var i=0; i<4; i++){
 										var v=(i+1)*100;
 
