@@ -2,10 +2,29 @@
 // mongodb://127.0.0.1:27017
 // const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority"
 const {MongoClient} = require('mongodb');
-
+const mongoose = require('mongoose')
 const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
+const fs = require('fs');
+const path = require('path');
+require('dotenv/config');
+const multer = require('multer');
+var storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, './uploads/images');
+	},
+	filename: (req, file, cb) => {
+		cb(null,Date.now()+'-'+file.originalname);
+	}
+});
+var imgModel = require('./model');
+var upload = multer({ 
+	storage: storage,
+	limits: {
+		fieldSize: 1024*1024*3,
+	}
+});
 var newUser;
 var userUpdate;
 var userDetails;
@@ -13,6 +32,18 @@ var details;
 var matList =[];
 var createdStatus=false;
 var updatedStatus=false;
+var imgFilename="";
+
+// app.get('/', (req,res)=>{
+// 	imgModel.find({}, (err,items) =>{
+// 		if(err){
+// 			console.log(err);
+// 			res.status(500).send('An error occured', err);
+// 		}else{
+// 			res.render('imagesPage',{items: items});
+// 		}
+// 	})
+// })
 
 
 app.listen(process.env.PORT || 3000,()=>{
@@ -44,6 +75,35 @@ app.get('/Events', (req,res) => {
 app.get('/About', (req,res) => {
 	res.send("Our About Page will be ready shortly..");
 });
+app.post('/Upload-profile-pic', upload.single('image'), (req, res, next) => {
+	imgFilename = req.file.filename;
+	// var obj = {
+	// 	name: req.body.name,
+	// 	desc: req.body.desc,
+	// 	img: {
+	// 		data: fs.readFileSync(path.join(__dirname+'/uplaods'+req.file.filename)), 
+	// 		contentType: 'image/png'
+	// 	}
+	// }
+	// imgModel.create(obj, (err,item) => {
+	// 	if (err) {
+	// 		console.log(err);
+	// 	}
+	// 	// else{
+	// 	// 	res.redirect('/');
+	// 	// }
+	// })
+})
+app.post('/NapsProfilePics',async (req, res) =>{
+	
+	await res.json({
+
+		file: imgFilename,
+
+	});
+ 
+	
+})
 app.post('/MatricList',async (req, res) =>{
 	// console.log("got the request for Matric List");
 	await main("findMatric").catch(console.error).then(()=>{
@@ -60,6 +120,7 @@ app.post('/MatricList',async (req, res) =>{
 app.post('/Registeration_Status',async (req, res) =>{
 	
 	newUser = await req.body;
+	newUser.ProfileImage=imgFilename;
 
 	await main("insertOneUser").catch(console.error).then(()=>{
 
@@ -133,7 +194,7 @@ app.post('/NapsDetails',async (req, res) =>{
 })
 
 async function main(action){
-	const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority";
+	const url ="mongodb://127.0.0.1:27017";
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 

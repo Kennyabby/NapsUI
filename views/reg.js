@@ -61,6 +61,7 @@ var proceedToNext=false, proceedToFinish=false, finished=false;
 var proceedToStatus=false, isMatricError=false, isNextClicked=false, isSaveClicked=false;
 var password="";
 var cpassword="";
+var imgButton = document.getElementById("view-img");
 var current = document.getElementById("current");
 var currentList = [];
 var posVal = document.getElementsByName("pos-val");
@@ -1012,7 +1013,23 @@ goBack.addEventListener("click", function(){
 	again.style.display="none";
 	regCover.style.display="inline-flex";
 });
+imgButton.addEventListener("click", async function(){
+	try{
+		const options = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			
+		};
+		const resp = await fetch('/NapsProfilePics',options);
+		const json = await resp.json();
+		var imageFileName = json.file;
+		console.log(imageFileName);
+	}catch(TypeError){
 
+	}
+})
 async function postToServer(){
 
 	const user = {

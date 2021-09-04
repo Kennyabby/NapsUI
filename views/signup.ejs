@@ -205,8 +205,11 @@
 				<div id="pic-info">
 				<img id="picture-cover" src="profile-pic.jpg">
 				</div>
-				<p><button id="upload-pic">Upload Profile Picture</button></p>
-
+				<form action="/Upload-profile-pic" method="POST" enctype="multipart/form-data">
+					<label for="image">Upload Profile Picture</label>
+					<input type="file" id="image" name="image" value="" required>
+					<button id="view-img" class="view-img" type="submit">Upload Image</button>
+				</form>
 			</div>
 		</div>
 
