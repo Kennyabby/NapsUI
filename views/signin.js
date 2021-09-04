@@ -408,6 +408,7 @@ async function inspectLoginDetails(){
 										})
 										
 									}
+									
 									editDiv.style.display="none"
 									if (userViewList.length>0){
 										for(var i=0; i<userViewList.length; i++){
@@ -421,6 +422,16 @@ async function inspectLoginDetails(){
 										}
 										viewList=[];
 									}
+									var p= document.createElement("p");
+									p.appendChild(document.createTextNode(`Search result for type ${sortSearch.value}: ${allsList.length}`));
+									p.style.color="blue";
+									p.style.fontSize="1rem";
+									p.style.fontWeight="bold";
+									p.style.fontFamily="monospace";
+									p.style.fontStyle="italic";
+									searchResult.appendChild(p);
+									viewList=viewList.concat(p);
+									searchResult.appendChild(p);
 									console.log(allsList);
 									allsList.forEach((users)=>{
 										// console.log(users);
@@ -750,7 +761,16 @@ async function inspectLoginDetails(){
 											viewList=[];
 										}
 										foundUser.forEach((user) => {										
-										
+											var p= document.createElement("p");
+											p.appendChild(document.createTextNode(`Search result for type ${sortSearch.value}: ${foundUser.length}`));
+											p.style.color="blue";
+											p.style.fontSize="1rem";
+											p.style.fontWeight="bold";
+											p.style.fontFamily="monospace";
+											p.style.fontStyle="italic";
+											searchResult.appendChild(p);
+											viewList=viewList.concat(p);
+											searchResult.appendChild(p);
 											viewAlls(user);
 
 										})
