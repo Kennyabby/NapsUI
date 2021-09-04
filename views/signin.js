@@ -26,6 +26,7 @@ var detailsCover = document.getElementById("details-cover");
 var userDetailsCover = document.getElementById("userdetails-cover");
 var editDiv = document.getElementById("edit-div");
 editDiv.style.display="none";
+var backDiv = document.getElementById("back-div");
 var saveDiv = document.getElementById("save-div");
 var searchMethod = document.getElementById("search-method");
 var searchBar = document.getElementById("search-bar");
@@ -375,9 +376,231 @@ async function inspectLoginDetails(){
 									console.log("clicked a method")
 									searchBar.placeholder="Enter Napsite "+searchMethod.value;
 								})
+								async function bySpecific() {
 
-								searchBar.addEventListener("input", async () =>{
+									backDiv.style.display="none";
+									var allsList=[];
+									const opts1 = {
+										method: 'POST',
+										headers: {
+											'Content-Type': 'application/json'
+										}
+									};
+									
+									const response2= await fetch("/LoginDetails", opts1);
+									const Usr = await response2.json();
+									const Users = await Usr.detailsList;
+									const st = sortSearch.value;
+									var c=0;
+									for (var i=0; i<4; i++){
+										var v=(i+1)*100;
+
+										Users.forEach((user)=>{
+										
+											if (user.Level===v.toString() && sortSearch.value===v.toString()){
+												
+												allsList=allsList.concat(user);											
+																				
+																						
+																							
+											}
+											
+										})
+										
+									}
 									editDiv.style.display="none"
+									if (userViewList.length>0){
+										for(var i=0; i<userViewList.length; i++){
+											userDetailsCover.removeChild(userViewList[i]);
+										}
+										userViewList=[];
+									}
+									if (viewList.length>0){
+										for(var i=0; i<viewList.length; i++){
+											searchResult.removeChild(viewList[i]);
+										}
+										viewList=[];
+									}
+									console.log(allsList);
+									allsList.forEach((users)=>{
+										// console.log(users);
+										viewAlls(users);
+									})
+								}
+								function viewAlls(user) {
+
+									var userView = document.createElement("div");
+									var userImg = document.createElement("img");
+									var label = document.createElement("label");
+									var label1 = document.createElement("label");
+									label1.appendChild(document.createTextNode(`${user.UserName}`));
+									label1.style.fontSize="1rem";
+									label1.style.fontWeight="bold";
+									label1.style.color="white";
+									label1.style.fontStyle="italic";
+									label1.style.position="absolute";
+									label1.style.bottom="25px";
+									label1.style.right="25px";
+									label1.style.cursor="pointer";
+
+									label.appendChild(document.createTextNode(`${user.LastName} ${user.FirstName} ${user.MiddleName}`))
+									label.style.fontSize="1.2rem";
+									label.style.position="absolute";
+									label.style.top="25px";
+									label.style.right="30px";
+									label.style.fontWeight="bold"
+									label.style.color="white";
+									label.style.cursor="pointer";
+
+									userImg.className="profi-img";
+									userImg.src="profile-img.png";
+									userView.appendChild(userImg);
+									userView.appendChild(label);
+									userView.appendChild(label1);										
+									userView.className="result-view";
+
+
+									searchResult.appendChild(userView);
+									viewList=viewList.concat(userView);
+
+									userView.addEventListener("click", () =>{
+										editDiv.style.display="inline-flex";
+										backDiv.style.display="inline-flex";
+										if (userView.childNodes[2].innerHTML===Napsite.UserName){
+											editDiv.style.display="none";
+											sideList.forEach((side)=>{
+
+												if (side===profile){
+													backDiv.style.display="none"
+													side.style.color="white";
+													var activeDiv2 = document.getElementById(side.id+"-div");
+													// console.log(opts.id);
+													activeDiv2.style.display="block";
+													sessionStorage.setItem("currDiv-key",side.id);
+													topList.forEach((opt) => {
+														opt.style.color="#00000099";
+														var activeDiv = document.getElementById(opt.id+"-div");
+														activeDiv.style.display="none";
+														// console.log("no view for, ",opt.id);
+													});
+
+												}
+												else{
+
+													side.style.color="#999999ff";
+													var activeDiv3 = document.getElementById(side.id+"-div");
+													activeDiv3.style.display="none";
+												}														
+											})								
+																				
+										}else{
+
+											if (viewList.length>0){
+												for(var i=0; i<viewList.length; i++){
+													searchResult.removeChild(viewList[i]);
+												}
+												viewList=[];
+											}
+											if (userViewList.length>0){
+												for(var i=0; i<userViewList.length; i++){
+													userDetailsCover.removeChild(userViewList[i]);
+												}
+												userViewList=[];
+											}
+											var userDetailsName = ["First Name: ","Middle Name: ","Last Name: ","UserName: ","Matric No: ","Gender: ","Level: ",
+												"Date Of Birth: ","Hall Allocated: ","Contact Number: ","Other Contact Number: ","Current Address: ",
+												"School Email: ","Email: ","Parent/Guardian Name: ","Parent/Guardian Address: ",
+												"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
+											userDetailsValue1 = initializeUserDetails(user);
+
+											function addNapsiteDetail1(napsiteName,napsiteValue){
+												
+												var napsdiv = document.createElement("div");
+												var nameTag = document.createElement("span");
+												var valueTag = document.createElement("span");
+												napsdiv.style.display="inline-flex";														
+												valueTag.style.marginLeft="30px";
+												nameTag.appendChild(document.createTextNode(`${napsiteName}`));
+												valueTag.appendChild(document.createTextNode(`${napsiteValue}`));
+												nameTag.style.fontWeight="bold";
+												nameTag.style.fontSize="1.5rem";
+												valueTag.style.fontStyle="italic";
+												nameTag.style.fontFamily="monospace"
+												valueTag.style.fontSize="1.5rem";
+												napsdiv.appendChild(nameTag);
+												napsdiv.appendChild(valueTag);
+												widthChangeEffect(x,nameTag,valueTag);
+												var spaceTag = document.createElement("p");
+												spaceTag.appendChild(napsdiv);
+												spaceTag.style.marginBottom="50px";
+												userDetailsCover.appendChild(spaceTag);
+												
+												userViewList = userViewList.concat(spaceTag);										
+												
+											}
+
+											for (var i=0; i<userDetailsName.length; i++){
+
+												addNapsiteDetail1(userDetailsName[i],userDetailsValue1[i]);
+
+											}
+
+											editDiv.addEventListener("click", () => {
+
+												removePreviousDetails(userViewList);
+												
+												for (var i=0; i<userDetailsName.length; i++){
+
+													editProfile(userDetailsName[i],userDetailsValue1[i]);
+
+												}
+
+												userViewList=[];
+												editDiv.style.display="none";
+												saveDiv.style.display="inline-flex";
+
+
+
+											});
+											backDiv.addEventListener("click", ()=> {
+												console.log("clicked now");
+												bySpecific();
+												
+											});
+
+											saveDiv.addEventListener("click", async ()=> {
+
+												await updateProfile();
+												for (var i=0; i<userDetailsName.length; i++){
+									
+													addNapsiteDetail1(userDetailsName[i],userDetailsValue1[i]);
+													
+
+												};
+												editTagList=[];
+												editNewList=[];
+												editDiv.style.display="inline-flex";
+												saveDiv.style.display="none";
+												// window.open("/NapsPage","_self");
+											})
+
+										}
+
+										
+									})
+
+								}
+
+								
+								sortSearch.addEventListener("input", async() =>{
+
+									bySpecific();
+									
+								})
+								
+								searchBar.addEventListener("input", async () =>{
+									editDiv.style.display="none";
+									backDiv.style.display="none";
 									var isSearchFound=false;
 									var userWithUserNameList=[];
 									var userWithUserNameAndSortList=[];
@@ -513,6 +736,7 @@ async function inspectLoginDetails(){
 									// console.log(isSearchFound);
 
 									if(foundUser.length>0 && searchBar.value!==""){
+
 										if (userViewList.length>0){
 											for(var i=0; i<userViewList.length; i++){
 												userDetailsCover.removeChild(userViewList[i]);
@@ -525,178 +749,37 @@ async function inspectLoginDetails(){
 											}
 											viewList=[];
 										}
-										foundUser.forEach((user) => {
-											
-											var userView = document.createElement("div");
-											var userImg = document.createElement("img");
-											var label = document.createElement("label");
-											var label1 = document.createElement("label");
-											label1.appendChild(document.createTextNode(`${user.UserName}`));
-											label1.style.fontSize="1rem";
-											label1.style.fontWeight="bold";
-											label1.style.color="white";
-											label1.style.fontStyle="italic";
-											label1.style.position="absolute";
-											label1.style.bottom="25px";
-											label1.style.right="25px";
-											label1.style.cursor="pointer";
-
-											label.appendChild(document.createTextNode(`${user.LastName} ${user.FirstName} ${user.MiddleName}`))
-											label.style.fontSize="1.2rem";
-											label.style.position="absolute";
-											label.style.top="25px";
-											label.style.right="30px";
-											label.style.fontWeight="bold"
-											label.style.color="white";
-											label.style.cursor="pointer";
-
-											userImg.className="profi-img";
-											userImg.src="profile-img.png";
-											userView.appendChild(userImg);
-											userView.appendChild(label);
-											userView.appendChild(label1);										
-											userView.className="result-view";
-
-
-											searchResult.appendChild(userView);
-											viewList=viewList.concat(userView);
-
-											userView.addEventListener("click", () =>{
-												editDiv.style.display="inline-flex";
-												if (userView.childNodes[2].innerHTML===Napsite.UserName){
-													editDiv.style.display="none";
-													sideList.forEach((side)=>{
-
-														if (side===profile){
-															side.style.color="white";
-															var activeDiv2 = document.getElementById(side.id+"-div");
-															// console.log(opts.id);
-															activeDiv2.style.display="block";
-															sessionStorage.setItem("currDiv-key",side.id);
-															topList.forEach((opt) => {
-																opt.style.color="#00000099";
-																var activeDiv = document.getElementById(opt.id+"-div");
-																activeDiv.style.display="none";
-																// console.log("no view for, ",opt.id);
-															});
-
-														}
-														else{
-
-															side.style.color="#999999ff";
-															var activeDiv3 = document.getElementById(side.id+"-div");
-															activeDiv3.style.display="none";
-														}														
-													})								
-																						
-												}else{
-
-													if (viewList.length>0){
-														for(var i=0; i<viewList.length; i++){
-															searchResult.removeChild(viewList[i]);
-														}
-														viewList=[];
-													}
-													if (userViewList.length>0){
-														for(var i=0; i<userViewList.length; i++){
-															userDetailsCover.removeChild(userViewList[i]);
-														}
-														userViewList=[];
-													}
-													var userDetailsName = ["First Name: ","Middle Name: ","Last Name: ","UserName: ","Matric No: ","Gender: ","Level: ",
-														"Date Of Birth: ","Hall Allocated: ","Contact Number: ","Other Contact Number: ","Current Address: ",
-														"School Email: ","Email: ","Parent/Guardian Name: ","Parent/Guardian Address: ",
-														"Parent/Guardian Contact: ","Parent/Guardian Other Contact: "];
-													userDetailsValue1 = initializeUserDetails(user);
-
-													function addNapsiteDetail1(napsiteName,napsiteValue){
-														
-														var napsdiv = document.createElement("div");
-														var nameTag = document.createElement("span");
-														var valueTag = document.createElement("span");
-														napsdiv.style.display="inline-flex";														
-														valueTag.style.marginLeft="30px";
-														nameTag.appendChild(document.createTextNode(`${napsiteName}`));
-														valueTag.appendChild(document.createTextNode(`${napsiteValue}`));
-														nameTag.style.fontWeight="bold";
-														nameTag.style.fontSize="1.5rem";
-														valueTag.style.fontStyle="italic";
-														nameTag.style.fontFamily="monospace"
-														valueTag.style.fontSize="1.5rem";
-														napsdiv.appendChild(nameTag);
-														napsdiv.appendChild(valueTag);
-														widthChangeEffect(x,nameTag,valueTag);
-														var spaceTag = document.createElement("p");
-														spaceTag.appendChild(napsdiv);
-														spaceTag.style.marginBottom="50px";
-														userDetailsCover.appendChild(spaceTag);
-														
-														userViewList = userViewList.concat(spaceTag);										
-														
-													}
-
-													for (var i=0; i<userDetailsName.length; i++){
-
-														addNapsiteDetail1(userDetailsName[i],userDetailsValue1[i]);
-
-													}
-
-													editDiv.addEventListener("click", () => {
-
-														removePreviousDetails(userViewList);
-														
-														for (var i=0; i<userDetailsName.length; i++){
-
-															editProfile(userDetailsName[i],userDetailsValue1[i]);
-
-														}
-
-														userViewList=[];
-														editDiv.style.display="none";
-														saveDiv.style.display="inline-flex";
-
-
-
-													});
-
-													saveDiv.addEventListener("click", async ()=> {
-
-														await updateProfile();
-														for (var i=0; i<userDetailsName.length; i++){
-											
-															addNapsiteDetail1(userDetailsName[i],userDetailsValue1[i]);
-															
-
-														};
-														editTagList=[];
-														editNewList=[];
-														editDiv.style.display="inline-flex";
-														saveDiv.style.display="none";
-														// window.open("/NapsPage","_self");
-													})
-
-												}
-
-													
-											})
-
+										foundUser.forEach((user) => {										
+										
+											viewAlls(user);
 
 										})
+
 									}else{
+
 										if (userViewList.length>0){
+											for(var i=0; i<userViewList.length; i++){
+												userDetailsCover.removeChild(userViewList[i]);
+											}
+											userViewList=[];
+										}
+										
+										if (searchBar.value.length>0){
+											
+											if (viewList.length>0){
+												for(var i=0; i<viewList.length; i++){
+													searchResult.removeChild(viewList[i]);
+												}
+												viewList=[];
+											}
+
+											if (userViewList.length>0){
 												for(var i=0; i<userViewList.length; i++){
 													userDetailsCover.removeChild(userViewList[i]);
 												}
 												userViewList=[];
 											}
-										if (viewList.length>0){
-											for(var i=0; i<viewList.length; i++){
-												searchResult.removeChild(viewList[i]);
-											}
-											viewList=[];
-										}
-										if (searchBar.value.length>0){
-											
+
 											var p= document.createElement("p");
 											p.appendChild(document.createTextNode(`No Napsite posses the info of ${searchMethod.value} you entered`));
 											p.style.color="red";
@@ -706,6 +789,8 @@ async function inspectLoginDetails(){
 											p.style.fontStyle="italic";
 											searchResult.appendChild(p);
 											viewList=viewList.concat(p);
+										}else{
+											bySpecific();
 										}
 										
 
