@@ -10,6 +10,7 @@ var emailKeys = ["@","stu",".ui",".edu",".ng","."];
 var logSection=document.getElementById("welcome");
 var logImg= document.getElementById("log-img")
 var profImg= document.getElementById("prof-img")
+var profileImage = document.getElementById("profile-image");
 var profile = document.getElementById("profile");
 var notifications = document.getElementById("notifications");
 var events = document.getElementById("events");
@@ -310,8 +311,15 @@ async function inspectLoginDetails(){
 
 							}
 								
-							x.addListener(widthChangeEffect);	
-							profImg.src="profile-img.png"
+							x.addListener(widthChangeEffect);
+							if (Napsite.ProfileImage!==""){
+								console.log(Napsite.ProfileImage);
+								profImg.style.padding="0px";
+								profImg.src=`./profile/images/${Napsite.ProfileImage}`;
+							}else{
+								profImg.src="profile-img.png"	
+							}
+							
 							var spanTag = document.createElement("p");
 							// spanTag.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
 							spanTag.appendChild(document.createTextNode(`${Napsite.UserName}`));
@@ -328,6 +336,13 @@ async function inspectLoginDetails(){
 							logSection.appendChild(spanTag);
 							logSection.appendChild(dropTag);
 							
+							if (Napsite.ProfileImage!==""){
+								console.log(Napsite.ProfileImage);
+								profileImage.style.padding="0px";
+								profileImage.src=`./profile/images/${Napsite.ProfileImage}`;
+							}else{
+								profileImage.src="profile-img.png"	
+							}
 							
 							profileName.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
 							profileName.style.marginLeft="50px";
@@ -478,7 +493,15 @@ async function inspectLoginDetails(){
 									label.style.cursor="pointer";
 
 									userImg.className="profi-img";
-									userImg.src="profile-img.png";
+
+									if (user.ProfileImage!==""){
+										console.log(user.ProfileImage);
+										userImg.src=`./profile/images/${user.ProfileImage}`;
+										userImg.style.padding="0px";
+									}else{
+										userImg.src="profile-img.png";	
+									}
+									
 									userView.appendChild(userImg);
 									userView.appendChild(label);
 									userView.appendChild(label1);										

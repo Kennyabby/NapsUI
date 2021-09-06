@@ -62,6 +62,9 @@ var proceedToStatus=false, isMatricError=false, isNextClicked=false, isSaveClick
 var password="";
 var cpassword="";
 var imgButton = document.getElementById("view-img");
+var imgButton1 = document.getElementById("view-imgs");
+var img = document.getElementById("image");
+var pictureCover = document.getElementById("picture-cover");
 var current = document.getElementById("current");
 var currentList = [];
 var posVal = document.getElementsByName("pos-val");
@@ -918,7 +921,7 @@ async function savedClicked(){
 	}
 }
 save.addEventListener("click", savedClicked);
-finish.addEventListener("click", function(){
+finish.addEventListener("click", async function(){
 
 	var cot=0;
 	var holdCount = infosCount;
@@ -957,6 +960,27 @@ finish.addEventListener("click", function(){
 		update(infosList[infosCount],infosChildList(), count);
 		finished=true;
 		proceedToFinish=false;
+
+		var usr = {
+
+			UserName: detailsValue[3],
+			MatricNo: detailsValue[8],
+		}
+		try{
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(usr),
+				
+			};
+			const resp = await fetch('/imagesStore',options);
+			
+		}catch(TypeError){
+
+		}
+
 	}
 	else{
 		monitorAll();
@@ -1013,7 +1037,8 @@ goBack.addEventListener("click", function(){
 	again.style.display="none";
 	regCover.style.display="inline-flex";
 });
-imgButton.addEventListener("click", async function(){
+imgButton1.addEventListener("click", async function(){
+	console.log("displaying image...");
 	try{
 		const options = {
 			method: 'POST',
@@ -1025,10 +1050,22 @@ imgButton.addEventListener("click", async function(){
 		const resp = await fetch('/NapsProfilePics',options);
 		const json = await resp.json();
 		var imageFileName = json.file;
-		console.log(imageFileName);
+		console.log("image name is: ",imageFileName);
+		
+		console.log(`./profile/images/${imageFileName}`);
+		window.stop();
+		
 	}catch(TypeError){
 
+	}finally{
+		pictureCover.src=`./profile/images/${imageFileName}`;
 	}
+})
+img.addEventListener("change", async ()=>{
+
+	console.log("changed...");
+	imgButton.click()===true;
+	
 })
 async function postToServer(){
 
@@ -1062,9 +1099,10 @@ async function postToServer(){
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(user)
-	};
 
-	try{
+	};
+	try{	
+
 		const response1 = await fetch('/Registeration_Status', options);	
 		const json = await response1.json();	
 		proceedToStatus = json.sts;

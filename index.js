@@ -12,10 +12,11 @@ require('dotenv/config');
 const multer = require('multer');
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, './uploads/images');
+		cb(null, './views/profile/images');
 	},
 	filename: (req, file, cb) => {
-		cb(null,Date.now()+'-'+file.originalname);
+		cb(null,Date.now()+'-'+imgStore.MatricNo+file.originalname.slice(
+			file.originalname.indexOf("."),));
 	}
 });
 var imgModel = require('./model');
@@ -26,10 +27,12 @@ var upload = multer({
 	}
 });
 var newUser;
+var imgStore;
 var userUpdate;
 var userDetails;
 var details;
 var matList =[];
+var imList=[];
 var createdStatus=false;
 var updatedStatus=false;
 var imgFilename="";
@@ -75,8 +78,21 @@ app.get('/Events', (req,res) => {
 app.get('/About', (req,res) => {
 	res.send("Our About Page will be ready shortly..");
 });
-app.post('/Upload-profile-pic', upload.single('image'), (req, res, next) => {
+app.post('/Upload-profile-pic', upload.single('image'), async (req, res, next) => {
 	imgFilename = req.file.filename;
+	imList = imList.concat(imgFilename);
+	console.log(imList);
+	if(imList.length>1){
+		imList.forEach((file)=>{
+			if(file!==imgFilename){
+				fs.unlinkSync(`./views/profile/images/${file}`);
+				imList.splice(imList.indexOf(file),1);
+				console.log(`deleted ./views/profile/images/${file}`);
+			}
+			
+		})
+	}
+	// console.log(imgFilename);
 	// var obj = {
 	// 	name: req.body.name,
 	// 	desc: req.body.desc,
@@ -95,14 +111,19 @@ app.post('/Upload-profile-pic', upload.single('image'), (req, res, next) => {
 	// })
 })
 app.post('/NapsProfilePics',async (req, res) =>{
-	
+				
+
 	await res.json({
-
 		file: imgFilename,
-
 	});
+
  
+})
+app.post('/imagesStore',async (req, res) =>{
 	
+	imgStore = await req.body;
+	console.log(imgStore.UserName);
+ 
 })
 app.post('/MatricList',async (req, res) =>{
 	// console.log("got the request for Matric List");
@@ -115,12 +136,12 @@ app.post('/MatricList',async (req, res) =>{
 		});	
 	});
 	
-	
 })
 app.post('/Registeration_Status',async (req, res) =>{
 	
 	newUser = await req.body;
 	newUser.ProfileImage=imgFilename;
+	console.log(imgFilename);
 
 	await main("insertOneUser").catch(console.error).then(()=>{
 
