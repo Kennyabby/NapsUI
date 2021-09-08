@@ -116,11 +116,12 @@ async function inspectLoginDetails(){
 	const response= await fetch("/LoginDetails", opts);
 	const LoginDetails = await response.json();
 	const userList = await LoginDetails.detailsList;
-	
+	var ct=0;
 	userList.forEach (async (user) => {
 		
 		if (user.SchoolEmail===inputEmail.value && user.Password===inputPassword.value){
-			// console.log(user.SchoolEmail);
+			ct++;
+			
 			// inputEmail.value="";
 			// inputPassword.value="";
 			inputPasswordTip.style.display="none";
@@ -1339,9 +1340,13 @@ async function inspectLoginDetails(){
 				
 			}
 		}else{
-
-			inputPasswordTip.style.display="flex";
-			inputPasswordTip.innerHTML="You have entered an invalid Email or Password!";
+			
+			if(ct!==1){
+					
+				inputPasswordTip.style.display="flex";
+				inputPasswordTip.innerHTML="You have entered an invalid Email or Password!";
+			}
+			
 		}
 	});
 	
@@ -1349,12 +1354,12 @@ async function inspectLoginDetails(){
 }
 sign_in.addEventListener("click", async () => {
 
-	if(inputEmail.value==="" && inputPassword.value!="") {
+	if(inputEmail.value==="" && inputPassword.value!=="") {
 	
 		inputEmailAddressTip.style.display="flex";
 		inputEmailAddressTip.innerHTML="Please fill in this field!";
 
-	}else if(inputEmail.value!="" && inputPassword.value==="") {
+	}else if(inputEmail.value!=="" && inputPassword.value==="") {
 		
 		inputPasswordTip.style.display="flex";
 		inputPasswordTip.innerHTML="Please fill in this field!";
@@ -1368,6 +1373,10 @@ sign_in.addEventListener("click", async () => {
 
 	}else{
 
+		inputEmailAddressTip.innerHTML="";
+		inputPasswordTip.innerHTML="";
+		inputPasswordTip.style.display="none";
+		inputEmailAddressTip.style.display="none";
 		await inspectLoginDetails().then( ()=> {
 			
 		});
@@ -1379,7 +1388,11 @@ sign_in.addEventListener("click", async () => {
 var setDash= sessionStorage.getItem("dash_key");
 
 if (setDash!==null){
+
+	
 	inspectLoginDetails();
+	inputPasswordTip.style.display="none";
+	inputEmailAddressTip.style.display="none";
 }
 
 inputPassword.addEventListener("keyup", function(event) {
