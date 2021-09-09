@@ -33,6 +33,7 @@ var inputParentAddress = document.getElementById("inputParentAddress");
 var inputUserName = document.getElementById("inputUserName");
 var inputPassword = document.getElementById("inputPassword");
 var inputConfirmPassword = document.getElementById("inputConfirmPassword");
+var inputConfirmImage = document.getElementById("inputConfirmImageTip");
 inputConfirmPassword.disabled=true;
 var hallList = ["MELLANBY", "TEDDER", "KUTI", "SULTAN BELLO", "QUEEN ELIZABETH II", "INDEPENDENCE", 
 "IDIA", "OBAFEMI AWOLOWO", "ALEXANDER BROWN", "INDEPENDENCE", "NNAMDI AZIKWE", "ABDULSALAMI ABUBAKAR"];
@@ -535,7 +536,7 @@ function displayInComp(){
 }
 
 async function monitorInput(input,parent){
-
+	inputConfirmImage.style.display= "none";
 	var infosChildId = input.parentElement.parentElement.id;
 	var infosTag = infosChildId.slice(0,infosChildId.indexOf("-"));
 	var toolTip = document.getElementById(input.id+"Tip");
@@ -725,7 +726,7 @@ signinLabel.addEventListener("click", function(){
 	update(infosList[infosCount],infosChildList(), count);
 });
 
-finilLabel.addEventListener("click", function(){
+finilLabel.addEventListener("click", async function(){
 	var cot=0;
 	var holdCount = infosCount;
 	for (var i=0; i<4; i++){
@@ -763,6 +764,27 @@ finilLabel.addEventListener("click", function(){
 		update(infosList[infosCount],infosChildList(), count);
 		finished=true;
 		proceedToFinish=false;
+
+		img.value="";
+		var usr = {
+
+			UserName: detailsValue[3],
+			MatricNo: detailsValue[8],
+		}
+		try{
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(usr),
+				
+			};
+			const resp = await fetch('/imagesStore',options);
+			
+		}catch(TypeError){
+
+		}
 	}
 	else{
 		monitorAll();
@@ -961,6 +983,7 @@ finish.addEventListener("click", async function(){
 		finished=true;
 		proceedToFinish=false;
 
+		img.value="";
 		var usr = {
 
 			UserName: detailsValue[3],
@@ -996,11 +1019,17 @@ submit.addEventListener("click", function(){
 	// ++infosCount;
 	// isPageSlide=true;
 	// update(infosList[infosCount],infosChildList(), count);
+	if(img.value!==""){
+		inputConfirmImage.style.display= "none";
+		regCover.style.display = "none";
+		waitCover.innerHTML= "Please Wait.."
+		waitCover.style.display="inline-flex";
+		postToServer();
+	}else{
+		inputConfirmImage.style.display= "flex";
+	}
+
 	
-	regCover.style.display = "none";
-	waitCover.innerHTML= "Please Wait.."
-	waitCover.style.display="inline-flex";
-	postToServer();
 });
 
 again.addEventListener("click", function(){
@@ -1037,34 +1066,38 @@ goBack.addEventListener("click", function(){
 	again.style.display="none";
 	regCover.style.display="inline-flex";
 });
-imgButton1.addEventListener("click", async function(){
-	console.log("displaying image...");
-	try{
-		const options = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			
-		};
-		const resp = await fetch('/NapsProfilePics',options);
-		const json = await resp.json();
-		var imageFileName = json.file;
-		console.log("image name is: ",imageFileName);
-		
-		console.log(`./profile/images/${imageFileName}`);
-		window.stop();
-		
-	}catch(TypeError){
 
-	}finally{
-		pictureCover.src=`./profile/images/${imageFileName}`;
-	}
-})
-img.addEventListener("change", async ()=>{
+img.addEventListener("change", ()=>{
 
 	console.log("changed...");
 	imgButton.click()===true;
+
+	setTimeout(async ()=>{
+		try{
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				
+			};
+			const resp = await fetch('/NapsProfilePics',options);
+			const json = await resp.json();
+			var imageFileName = json.file;
+			console.log("image name is: ",imageFileName);
+			
+			console.log(`./profile/images/${imageFileName}`);
+			window.stop();
+			
+		}catch(TypeError){
+
+		}finally{
+			pictureCover.src=`./profile/images/${imageFileName}`;
+			inputConfirmImage.style.display= "none";
+		}
+	},2000);
+
+	
 	
 })
 async function postToServer(){

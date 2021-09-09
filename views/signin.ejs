@@ -157,8 +157,19 @@
         <div class="no-view" id="profile-div">
           <div class= "image-cover" id="image-cover">
             <div id="profile-identifier" class="profile-identifier">
-              <img id="profile-image" class="profile-image" src="profile-img.png">
-              <img id="image-options" class="image-options" src="image-opts.png">
+              <div class="imageGroup">
+                <img id="profile-image" class="profile-image" src="profile-img.png">
+                <div class="imgDropdown">
+                  <p><img id="image-options" class="image-options" src="image-opts.png"></p>
+                  <form action="/UploadProfilePics" method="POST" enctype="multipart/form-data">
+                    <input style="display: none;"type="file" id="updImg" name="image" value="Update Picture">
+                    <button style= "display: none;" id="view-img" class="view-img" type="submit">Upload Image</button>
+                  </form>
+                  <p class="dropdown" id="updatePic">Update Picture</p>
+                  <p class="dropdown" id="viewPic">View</p>
+                  <p class="dropdown" id="removePic">Remove Picture</p>
+                </div>  
+              </div>
             </div> 
           </div>
          <!--  <div id="edit-div" class="edit-div"><img id="edit-img" class="edit-img" src="edit.png"><p class="edit" id="edit">Edit Profile</p></div>

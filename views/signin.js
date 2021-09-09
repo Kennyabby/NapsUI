@@ -12,6 +12,12 @@ var logImg= document.getElementById("log-img")
 var profImg= document.getElementById("prof-img")
 var profileImage = document.getElementById("profile-image");
 var profile = document.getElementById("profile");
+var imageOpts = document.getElementById("image-options");
+var updatePic = document.getElementById("updatePic");
+var viewPic = document.getElementById("viewPic");
+var removePic = document.getElementById("removePic");
+var updImg = document.getElementById("updImg");
+var imgButton = document.getElementById("view-img");
 var notifications = document.getElementById("notifications");
 var events = document.getElementById("events");
 var tasks = document.getElementById("tasks");
@@ -96,9 +102,9 @@ inputPassword.value=sessionStorage.getItem("user-password");
 inputPasswordTip.style.display="none";
 inputEmailAddressTip.style.display="none";
 
-console.log("This is a fresh page");
+// console.log("This is a fresh page");
 async function inspectLoginDetails(){
-	console.log("inspecting logging");
+	// console.log("inspecting logging");
 	// console.log("clicked");
 	const opts = {
 		method: 'POST',
@@ -137,7 +143,7 @@ async function inspectLoginDetails(){
 				detailsSent = json.sts;
 				
 				if (detailsSent){
-					console.log("yes");
+					// console.log("yes");
 					// window.open('/Dashboard','_self');
 					// window.location.href="/Dashboard";
 
@@ -151,11 +157,12 @@ async function inspectLoginDetails(){
 									'Content-Type': 'application/json'
 								}
 							};
-							console.log("started dashboard");
+							// console.log("started dashboard");
 							const response2= await fetch("/NapsDetails", opts1);
 							const User = await response2.json();
 							var Napsite = await User.details;
-							console.log(Napsite);
+							// console.log(Napsite);
+
 							if (Napsite.Gender==="Male") {
 
 								logImg.src="male-profile.png";
@@ -224,7 +231,7 @@ async function inspectLoginDetails(){
 							var x = window.matchMedia("(max-width: 750px)");
 							function widthChangeEffect(x,nTag,vTag){
 								if (x.matches){
-									console.log("matched");
+									// console.log("matched");
 									userName.style.right="20px";
 									userName.style.fontSize="1rem";
 									userName.style.bottom="8px";
@@ -266,7 +273,7 @@ async function inspectLoginDetails(){
 									
 
 								}else{
-									console.log("doesn't match");
+									// console.log("doesn't match");
 									userName.style.right="30px";
 									userName.style.fontSize="1.5rem";
 									userName.style.bottom="10px";
@@ -310,16 +317,47 @@ async function inspectLoginDetails(){
 								}
 
 							}
-								
+							var hasProfileImage = false;
 							x.addListener(widthChangeEffect);
 							if (Napsite.ProfileImage!==""){
-								console.log(Napsite.ProfileImage);
+								// console.log(Napsite.ProfileImage);
 								profImg.style.padding="0px";
 								profImg.src=`./profile/images/${Napsite.ProfileImage}`;
+								// console.log(profImg.src);
+								hasProfileImage=true;
 							}else{
-								profImg.src="profile-img.png"	
+								profImg.src="profile-img.png";	
+								hasProfileImage=false;
 							}
 							
+							function toggleOpts(){
+								if(updatePic.style.display!=="none"){
+									updatePic.style.display="none";
+									viewPic.style.display="none";
+									removePic.style.display="none";
+								}else{
+									// console.log("option clicked");
+									updatePic.style.display="block";
+									if(hasProfileImage){
+										
+										viewPic.style.display="block";
+										removePic.style.display="block";
+									}else{
+										viewPic.style.display="none";
+										removePic.style.display="none";
+									}
+									
+								}
+
+							}
+							imageOpts.addEventListener("click",()=>{
+								toggleOpts();
+							});
+							updatePic.addEventListener("click",()=>{
+								updImg.click();
+								toggleOpts();
+							});
+
 							var spanTag = document.createElement("p");
 							// spanTag.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
 							spanTag.appendChild(document.createTextNode(`${Napsite.UserName}`));
@@ -337,13 +375,65 @@ async function inspectLoginDetails(){
 							logSection.appendChild(dropTag);
 							
 							if (Napsite.ProfileImage!==""){
-								console.log(Napsite.ProfileImage);
+								// console.log(Napsite.ProfileImage);
 								profileImage.style.padding="0px";
 								profileImage.src=`./profile/images/${Napsite.ProfileImage}`;
 							}else{
 								profileImage.src="profile-img.png"	
 							}
 							
+							updImg.addEventListener("change", ()=>{
+								console.log("changed...");
+								imgButton.click()===true;
+
+								setTimeout(async ()=>{
+									try{
+										const options = {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json'
+											},
+											
+										};
+										const resp = await fetch('/NapsProfilePics',options);
+										const json = await resp.json();
+										var imageFileName = json.file;
+										console.log("image name is: ",imageFileName);
+										
+										console.log(`./profile/images/${imageFileName}`);
+										window.stop();
+										
+									}catch(TypeError){
+
+									}finally{
+										profileImage.style.padding="0px";
+										profImg.style.padding="0px";
+										profileImage.src=`./profile/images/${imageFileName}`;
+										profImg.src=`./profile/images/${imageFileName}`;
+										var user ={
+
+											ProfileImage: imageFileName,
+											MatricNo: Napsite.MatricNo,
+										}
+
+										const options = {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json'
+											},
+											body: JSON.stringify(user)
+										};
+
+										try{
+											const response1 = await fetch('/ProfileUpdate', options);	
+											const json = await response1.json();									
+												
+										}catch(TypeError){
+
+										}
+									}
+								},2000);
+							})
 							profileName.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
 							profileName.style.marginLeft="50px";
 							profileName.style.marginTop="50px";
@@ -1192,7 +1282,7 @@ async function inspectLoginDetails(){
 
 							var stringNapsite = "loggedin";
 							sessionStorage.setItem("dash_key", stringNapsite);
-							console.log(sessionStorage.getItem("dash_key"));
+							// console.log(sessionStorage.getItem("dash_key"));
 
 							logSection.addEventListener("click", () => {
 								
@@ -1202,11 +1292,33 @@ async function inspectLoginDetails(){
 								sessionStorage.removeItem("currDiv-key");
 								console.log(sessionStorage.getItem("dash_key"));
 								if (sessionStorage.getItem("dash_key")===null){
-									console.log("yes");
+									// console.log("yes");
 									window.open("/NapsPage","_self");
 								}
 								
 							});
+							var usrs = {
+
+								Image: Napsite.ProfileImage,
+								UserName: Napsite.UserName,
+								MatricNo: Napsite.MatricNo,
+							}
+							
+							try{
+								const opti = {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: JSON.stringify(usrs),
+									
+								};
+
+								const resps = await fetch('/imagesStore',opti);
+								
+							}catch(TypeError){
+
+							};
 							
 						}catch(TypeError){
 

@@ -110,6 +110,25 @@ app.post('/Upload-profile-pic', upload.single('image'), async (req, res, next) =
 	// 	// }
 	// })
 })
+app.post('/UploadProfilePics', upload.single('image'), async (req, res, next) => {
+	imgFilename = req.file.filename;
+	console.log(imgFilename);
+	if(imgStore.Image!==""){
+		imList = imList.concat(`${imgStore.Image}`);	
+	}
+	imList = imList.concat(imgFilename);
+	console.log(imList);
+	if(imList.length>1){
+		imList.forEach((file)=>{
+			if(file!==imgFilename){
+				fs.unlinkSync(`./views/profile/images/${file}`);
+				imList.splice(imList.indexOf(file),1);
+				console.log(`deleted ./views/profile/images/${file}`);
+			}
+			
+		})
+	}
+});
 app.post('/NapsProfilePics',async (req, res) =>{
 				
 
@@ -122,9 +141,10 @@ app.post('/NapsProfilePics',async (req, res) =>{
 app.post('/imagesStore',async (req, res) =>{
 	
 	imgStore = await req.body;
-	console.log(imgStore.UserName);
+	
  
 })
+
 app.post('/MatricList',async (req, res) =>{
 	// console.log("got the request for Matric List");
 	await main("findMatric").catch(console.error).then(()=>{

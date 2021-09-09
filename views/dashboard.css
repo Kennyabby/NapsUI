@@ -321,10 +321,27 @@ body {
   margin: 0px;
  
 }
+.imageGroup{
+  position:  relative;
+  height:210px;
+  width:210px;
+  /*background-color: #55555588;*/
+  display: block;
+}
+.imgDropdown{
+  position: absolute;
+  /*background-color: #55555588;*/
+  margin: 0px;
+  padding: 0px;
+  top: 20px;
+  left: 0px;
+  display: inline-block;
+
+}
 .image-options{
   position: absolute;
-  bottom: 10px;
   left: 160px;
+  /*bottom: 40px;*/
   height:40px;
   width:40px;
   background-color: #1111ff99;
@@ -334,6 +351,18 @@ body {
   cursor: pointer;
  
 }
+.dropdown{
+  
+  display: none;
+  margin-top: 10px;
+  background-color: #11111199;
+  font-size: 0.9rem;
+  border-radius: 50px;
+  padding: 5px;
+  cursor: pointer;
+ 
+}
+
 .profile-identifier{
   position: absolute;
   text-align: center;
@@ -602,14 +631,21 @@ body {
 }
 
 .profile-identifier{
-  position: absolute;
+  /*position: absolute;*/
   text-align: center;
   bottom: 60px;
   font-size: 2rem;
   font-weight: bold;
   left: 10px;
   /*margin-bottom: 50px;*/
-  display: inline-flex;
+  /*display: inline-flex;*/
+}
+.imageGroup{
+  position:  relative;
+  height:120px;
+  width:120px;
+  /*background-color: #55555588;*/
+  display: block;
 }
 .profile-image{
   height:100px;
@@ -620,10 +656,18 @@ body {
   margin: 0px;
  
 }
+.imgDropdown{
+  position: absolute;
+  /*background-color: #55555588;*/
+  margin: 0px;
+  padding: 0px;
+  left: 0px;
+  display: inline-block;
+
+}
 .image-options{
   position: absolute;
-  bottom: 55px;
-  left: 75px;
+  left: 85px;
   height:30px;
   width:30px;
   background-color: #1111ff99;
@@ -633,6 +677,20 @@ body {
   cursor: pointer;
  
 }
+.dropdown{
+  
+  display: none;
+  margin: 0px;
+  margin-left: 25px;
+  margin-bottom: 5px;
+  background-color: #11111199;
+  font-size: 0.6rem;
+  border-radius: 50px;
+  padding: 5px;
+  cursor: pointer;
+ 
+}
+
 .details-cover{
 
   margin-top: 50px;
