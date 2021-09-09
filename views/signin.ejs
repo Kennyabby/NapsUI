@@ -230,14 +230,17 @@
     var signPage = document.getElementById("sign-page");
     var dashPage = document.getElementById("dash-page");
     var setDash= sessionStorage.getItem("dash_key");
-
-    console.log("dash is", setDash," and ");
-    console.log(setDash===null);
+    // var condition= "inSession";
+    // sessionStorage.setItem("cond_key", condition);
+    // console.log("dash is", setDash," and ");
+    // console.log(setDash===null);
 
     if (setDash===null){
        // console.log("dash is null");
        signPage.style.display="block";
        dashPage.style.display= "none"; 
+       var condition= "inSession";
+       sessionStorage.setItem("cond_key", condition);
        document.body.style.backgroundImage = "url('home.jpg')"; 
     }
     else {

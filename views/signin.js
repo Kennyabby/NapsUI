@@ -88,6 +88,14 @@ var userIndex;
 var side1 = document.createElement("div");;
 var detaisSent=false;
 var isEditProfile=false;
+var condition= "inSession";
+// var onConditon="inSession";
+if(sessionStorage.getItem("cond_key")===null){
+	sessionStorage.setItem("cond_key", condition);
+}else{
+	sessionStorage.removeItem("cond_key");
+}
+// console.log(sessionStorage.getItem("cond_key"));
 forgot.addEventListener("mousedown", function(){
 	forgot.style.boxShadow="4px 4px 5px black";
 	forgot.style.border="solid #0000ff33 3px";
@@ -121,7 +129,14 @@ async function inspectLoginDetails(){
 		
 		if (user.SchoolEmail===inputEmail.value && user.Password===inputPassword.value){
 			ct++;
-			
+			var stringNapsite = "loggedin";
+			// console.log(sessionStorage.getItem("cond_key"));
+			if(sessionStorage.getItem("cond_key")!==null){
+				sessionStorage.setItem("dash_key", stringNapsite);
+				// console.log("started Session");
+				window.open("/NapsPage","_self");
+			};
+			sessionStorage.setItem("cond_key", condition);
 			// inputEmail.value="";
 			// inputPassword.value="";
 			inputPasswordTip.style.display="none";
@@ -1281,7 +1296,7 @@ async function inspectLoginDetails(){
 
 							});
 
-							var stringNapsite = "loggedin";
+							
 							sessionStorage.setItem("dash_key", stringNapsite);
 							// console.log(sessionStorage.getItem("dash_key"));
 
@@ -1290,6 +1305,7 @@ async function inspectLoginDetails(){
 								sessionStorage.removeItem("user-email");
 								sessionStorage.removeItem("user-password");
 								sessionStorage.removeItem("dash_key");
+								sessionStorage.removeItem("cond_key");
 								sessionStorage.removeItem("currDiv-key");
 								console.log(sessionStorage.getItem("dash_key"));
 								if (sessionStorage.getItem("dash_key")===null){
@@ -1391,8 +1407,7 @@ if (setDash!==null){
 
 	
 	inspectLoginDetails();
-	inputPasswordTip.style.display="none";
-	inputEmailAddressTip.style.display="none";
+	
 }
 
 inputPassword.addEventListener("keyup", function(event) {
