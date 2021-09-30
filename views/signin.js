@@ -338,7 +338,7 @@ async function inspectLoginDetails(){
 							if (Napsite.ProfileImage!==""){
 								// console.log(Napsite.ProfileImage);
 								profImg.style.padding="0px";
-								profImg.src=`./profile/images/${Napsite.ProfileImage}`;
+								profImg.src=`https://naps-ui-bucket2021.s3.amazonaws.com/${Napsite.ProfileImage}`;
 								// console.log(profImg.src);
 								hasProfileImage=true;
 							}else{
@@ -393,15 +393,15 @@ async function inspectLoginDetails(){
 							if (Napsite.ProfileImage!==""){
 								// console.log(Napsite.ProfileImage);
 								profileImage.style.padding="0px";
-								profileImage.src=`./profile/images/${Napsite.ProfileImage}`;
+								profileImage.src=`https://naps-ui-bucket2021.s3.amazonaws.com/${Napsite.ProfileImage}`;
 							}else{
 								profileImage.src="profile-img.png"	
 							}
 							
 							updImg.addEventListener("change", ()=>{
-								console.log("changed...");
+								
 								imgButton.click()===true;
-
+								var ur="";
 								setTimeout(async ()=>{
 									try{
 										const options = {
@@ -424,8 +424,7 @@ async function inspectLoginDetails(){
 									}finally{
 										profileImage.style.padding="0px";
 										profImg.style.padding="0px";
-										profileImage.src=`./profile/images/${imageFileName}`;
-										profImg.src=`./profile/images/${imageFileName}`;
+										
 										var user ={
 
 											ProfileImage: imageFileName,
@@ -447,9 +446,61 @@ async function inspectLoginDetails(){
 										}catch(TypeError){
 
 										}
+
+										console.log("changed...");
+										var file= updImg.files[0];
+										console.log(file);
+										console.log(updImg.files);
+										getSignedRequest(file);
+										console.log("checking....");
+										
+										function getSignedRequest(file){
+										  const xhr = new XMLHttpRequest();
+										  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+
+										  xhr.onreadystatechange = () => {
+										    if(xhr.readyState === 4){
+										      if(xhr.status === 200){
+										        const response = JSON.parse(xhr.responseText);
+										        uploadFile(file, response.signedRequest, response.url);
+										      }
+										      else{
+										        alert('Could not get signed URL.');
+										      }
+										    }
+										  };
+										  xhr.send();
+										}
+										
+										function uploadFile(file, signedRequest, url){
+										  const xhr = new XMLHttpRequest();
+										  xhr.open('PUT', signedRequest);
+										  xhr.onreadystatechange = () => {
+										  	console.log('this is the image: ',url);
+										  	ur=url;
+										  	profileImage.src=`${ur}`;
+											profImg.src=`${ur}`;
+										    if(xhr.readyState === 4){
+										    	
+										      if(xhr.status === 200){
+										        
+										        // document.getElementById('avatar-url').value = url;
+										      }
+										      else{
+										        // alert('Could not upload file.');
+										      }
+										    }
+										  };
+										  xhr.send(file);
+										  
+										}
+										
 									}
 								},2000);
+								
 							})
+							
+
 							profileName.appendChild(document.createTextNode(`${Napsite.LastName} ${Napsite.FirstName} ${Napsite.MiddleName}`));
 							profileName.style.marginLeft="50px";
 							profileName.style.marginTop="50px";
@@ -602,7 +653,7 @@ async function inspectLoginDetails(){
 
 									if (user.ProfileImage!==""){
 										console.log(user.ProfileImage);
-										userImg.src=`./profile/images/${user.ProfileImage}`;
+										userImg.src=`https://naps-ui-bucket2021.s3.amazonaws.com/${user.ProfileImage}`;
 										userImg.style.padding="0px";
 									}else{
 										userImg.src="profile-img.png";	
@@ -679,7 +730,7 @@ async function inspectLoginDetails(){
 												nameTag.style.fontWeight="bold";
 												nameTag.style.fontSize="1.5rem";
 												valueTag.style.fontStyle="italic";
-												nameTag.style.fontFamily="monospace"
+												nameTag.style.fontFamily="monospace";
 												valueTag.style.fontSize="1.5rem";
 												napsdiv.appendChild(nameTag);
 												napsdiv.appendChild(valueTag);

@@ -4,10 +4,13 @@
 const {MongoClient} = require('mongodb');
 const mongoose = require('mongoose')
 const express = require('express');
+const aws = require('aws-sdk');
 const app = express();
 const bodyParser= require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const S3_BUCKET = "naps-ui-bucket2021";
+aws.config.region = 'us-east-2';
 require('dotenv/config');
 const multer = require('multer');
 var storage = multer.diskStorage({
@@ -33,9 +36,10 @@ var userDetails;
 var details;
 var matList =[];
 var imList=[];
+var sImList=[];
 var createdStatus=false;
 var updatedStatus=false;
-var imgFilename="";
+var imgFilenames="";
 
 // app.get('/', (req,res)=>{
 // 	imgModel.find({}, (err,items) =>{
@@ -52,10 +56,115 @@ var imgFilename="";
 app.listen(process.env.PORT || 3000,()=>{
 	console.log("listening at 3000");
 })
+app.use(function (req, res, next) {
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+	res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	next();
+});
 app.use(express.static("views"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
+app.get('/sign-s3', (req, res) => {
+	console.log("sign-s3 called");
+  const s3 = new aws.S3({
+  	accessKeyId: "AKIAUILE6XYF5BNUHPP4",
+  	secretAccessKey: "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"
+  });
+  const imgFilename = `./views/profile/images/${imgFilenames}`;
+  const fileType = req.query['file-type'];
+  const fileContent = fs.readFileSync(imgFilename);
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: imgFilenames,
+    Body: fileContent,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+  sImList = sImList.concat(s3Params);
+	// console.log(sImList);
+	if(imgStore.Image!=="" && imgStore.Image!==undefined){
+		console.log("creating params");
+		const fileContents = fs.readFileSync(`./views/profile/images/${imgStore.Image}`);
+		const s3Paramss = {
+
+	    Bucket: S3_BUCKET,
+	    Key: imgStore.Image,
+	    Body: fileContents,
+	    Expires: 60,
+	    ContentType: fileType,
+	    ACL: 'public-read'
+	  };
+		sImList = sImList.concat(s3Paramss);	
+		console.log(sImList);
+	}
+	if(sImList.length>1){
+		console.log("getting ready to delete");
+		 sImList.forEach((file)=>{
+			if(file!==s3Params){
+				console.log("got one",file);
+				s3.deleteObject({Bucket: file.Bucket, Key: file.Key}, function(err, data) {
+					console.log("deleting");
+			   if (err) {
+			    console.log(err);
+			   } else {
+			    // resolve(data);
+			    console.log(`deleted this: ${file}`);
+			   }
+			  });
+				sImList.splice(sImList.indexOf(file),1);
+				
+			}
+			
+		})
+	}
+	if(imList.length>1){
+		imList.forEach((file)=>{
+			if(file!==imgFilenames){
+				fs.unlinkSync(`./views/profile/images/${file}`);
+				imList.splice(imList.indexOf(file),1);
+				console.log(`deleted ./views/profile/images/${file}`);
+			}
+			
+		})
+	}
+	
+	s3.putObject(s3Params, function(err, data){
+	  if (!err) 
+	    { 
+	        // callbackOk(fileName, imgFilenames);
+	        console.log('succesfully uploaded the image!');
+
+	        s3.getSignedUrl('putObject', s3Params, (err, data) => {
+
+				  	console.log("in signed url");
+				    if(err){
+				      console.log(err);
+				      return res.end();
+				    }
+				    console.log("past error");
+				    const returnData = {
+				      signedRequest: s3Params,
+				      url: `https://naps-ui-bucket2021.s3.amazonaws.com/${imgFilenames}`
+				    };
+				    console.log("data returned");
+				    console.log(returnData.url);
+				    res.write(JSON.stringify(returnData));
+				    res.end();
+				  });
+
+	    } else {
+	        console.log('Error uploading data: ', s3Params); 
+	        // callbackFail();
+	    }
+	});
+  
+  
+  
+});
 app.get('/', (req,res) => {
 	res.render("index.ejs", {});
 })
@@ -78,62 +187,27 @@ app.get('/Events', (req,res) => {
 app.get('/About', (req,res) => {
 	res.send("Our About Page will be ready shortly..");
 });
+
 app.post('/Upload-profile-pic', upload.single('image'), async (req, res, next) => {
-	imgFilename = req.file.filename;
-	imList = imList.concat(imgFilename);
+	imgFilenames = req.file.filename;
+	imList = imList.concat(imgFilenames);
 	console.log(imList);
-	if(imList.length>1){
-		imList.forEach((file)=>{
-			if(file!==imgFilename){
-				fs.unlinkSync(`./views/profile/images/${file}`);
-				imList.splice(imList.indexOf(file),1);
-				console.log(`deleted ./views/profile/images/${file}`);
-			}
-			
-		})
-	}
-	// console.log(imgFilename);
-	// var obj = {
-	// 	name: req.body.name,
-	// 	desc: req.body.desc,
-	// 	img: {
-	// 		data: fs.readFileSync(path.join(__dirname+'/uplaods'+req.file.filename)), 
-	// 		contentType: 'image/png'
-	// 	}
-	// }
-	// imgModel.create(obj, (err,item) => {
-	// 	if (err) {
-	// 		console.log(err);
-	// 	}
-	// 	// else{
-	// 	// 	res.redirect('/');
-	// 	// }
-	// })
+	
+
 })
 app.post('/UploadProfilePics', upload.single('image'), async (req, res, next) => {
-	imgFilename = req.file.filename;
-	console.log(imgFilename);
+	imgFilenames = req.file.filename;
 	if(imgStore.Image!==""){
 		imList = imList.concat(`${imgStore.Image}`);	
 	}
-	imList = imList.concat(imgFilename);
-	console.log(imList);
-	if(imList.length>1){
-		imList.forEach((file)=>{
-			if(file!==imgFilename){
-				fs.unlinkSync(`./views/profile/images/${file}`);
-				imList.splice(imList.indexOf(file),1);
-				console.log(`deleted ./views/profile/images/${file}`);
-			}
-			
-		})
-	}
+	imList = imList.concat(imgFilenames);
+	
 });
 app.post('/NapsProfilePics',async (req, res) =>{
 				
 
 	await res.json({
-		file: imgFilename,
+		file: imgFilenames,
 	});
 
  
