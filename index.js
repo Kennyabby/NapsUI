@@ -1,6 +1,5 @@
 
-// mongodb://127.0.0.1:27017
-// const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority"
+
 const {MongoClient} = require('mongodb');
 const mongoose = require('mongoose')
 const express = require('express');
@@ -29,6 +28,7 @@ var upload = multer({
 		fieldSize: 1024*1024*3,
 	}
 });
+
 var newUser;
 var imgStore;
 var userUpdate;
@@ -70,8 +70,8 @@ app.set("view engine", "ejs");
 app.get('/sign-s3', (req, res) => {
 	console.log("sign-s3 called");
   const s3 = new aws.S3({
-  	accessKeyId: "AKIAUILE6XYF5BNUHPP4",
-  	secretAccessKey: "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"
+  	accessKeyId: process.env.ACCESS_KEY_ID,
+  	secretAccessKey: process.env.SECRETE_ACCESS_KEY
   });
   const imgFilename = `./views/profile/images/${imgFilenames}`;
   const fileType = req.query['file-type'];
@@ -309,7 +309,7 @@ app.post('/NapsDetails',async (req, res) =>{
 })
 
 async function main(action){
-	const url ="mongodb+srv://napsite:Napsite@21@cluster0.nm56r.mongodb.net/myFirstDatabase?retryWrites=true&useUnifiedTopology=true&w=majority";
+	const url =process.env.MONGO_URL;
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 
