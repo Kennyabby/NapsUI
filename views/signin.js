@@ -461,12 +461,15 @@ async function inspectLoginDetails(){
 										  xhr.onreadystatechange = () => {
 										  	console.log("onreadystatechange called");
 										    if(xhr.readyState === 4){
+										    	console.log("readyState = 4");
 										      if(xhr.status === 200){
+										      	console.log("readyState = 200");
 										        const response = JSON.parse(xhr.responseText);
 										        uploadFile(file, response.signedRequest, response.url);
 										        console.log("uploadFile called");
 										      }
 										      else{
+										      	console.log("readyState != 200");
 										        // alert('Could not get signed URL.');
 										      }
 										    }
