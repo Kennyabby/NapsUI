@@ -457,12 +457,14 @@ async function inspectLoginDetails(){
 										function getSignedRequest(file){
 										  const xhr = new XMLHttpRequest();
 										  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
-
+										  console.log("/sign-s3 called");
 										  xhr.onreadystatechange = () => {
+										  	console.log("onreadystatechange called");
 										    if(xhr.readyState === 4){
 										      if(xhr.status === 200){
 										        const response = JSON.parse(xhr.responseText);
 										        uploadFile(file, response.signedRequest, response.url);
+										        console.log("uploadFile called");
 										      }
 										      else{
 										        // alert('Could not get signed URL.');
@@ -470,9 +472,11 @@ async function inspectLoginDetails(){
 										    }
 										  };
 										  xhr.send();
+										  console.log("xhr sent...");
 										}
 										
 										function uploadFile(file, signedRequest, url){
+											console.log("uploadingFile");
 										  const xhr = new XMLHttpRequest();
 										  xhr.open('PUT', signedRequest);
 										  xhr.onreadystatechange = () => {
