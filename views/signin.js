@@ -468,11 +468,8 @@ async function inspectLoginDetails(){
 										}catch(TypeError){
 
 										}finally{
-<<<<<<< HEAD
 											console.log(file);
-=======
 											console.log(urls);
->>>>>>> 4ac97ad561d747d66e31d8702c52ab402a11449f
 											profileImage.src=urls;
 											profImg.src=urls;
 										}
