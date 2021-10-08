@@ -314,7 +314,7 @@ app.post('/NapsDetails',async (req, res) =>{
 })
 
 async function main(action){
-	const url =process.env.MONGO_URL;
+	const url =process.env.MON_URL;
 	const client = new MongoClient(url,{useUnifiedTopology:true});
 	try {
 
