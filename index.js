@@ -67,7 +67,7 @@ app.use(express.static("views"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.get('/sign-s3', (req, res) => {
+app.post('/sign-s3', (req, res) => {
 	console.log("sign-s3 called");
   const s3 = new aws.S3({
   	accessKeyId: process.env.ACCESS_KEY_ID,
@@ -152,8 +152,13 @@ app.get('/sign-s3', (req, res) => {
 				    };
 				    console.log("data returned");
 				    console.log(returnData.url);
-				    res.write(JSON.stringify(returnData));
-				    res.end();
+				    res.json({
+
+							imageUrl: returnData.url
+
+						});	
+				    // res.write(JSON.stringify(returnData));
+				    // res.end();
 				  });
 
 	    } else {
