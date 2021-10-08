@@ -438,10 +438,11 @@ async function inspectLoginDetails(){
 											},
 											body: JSON.stringify(user)
 										};
-
+										var urls;
 										try{
 											const response1 = await fetch('/ProfileUpdate', options);	
-											const json = await response1.json();									
+											const json = await response1.json();	
+																	
 												
 										}catch(TypeError){
 
@@ -451,56 +452,76 @@ async function inspectLoginDetails(){
 										var file= updImg.files[0];
 										console.log(file);
 										console.log(updImg.files);
-										getSignedRequest(file);
-										console.log("checking....");
-										
-										function getSignedRequest(file){
-										  const xhr = new XMLHttpRequest();
-										  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
-										  console.log("/sign-s3 called");
-										  xhr.onreadystatechange = () => {
-										  	console.log("onreadystatechange called");
-										    if(xhr.readyState === 4){
-										    	console.log("readyState = 4");
-										      if(xhr.status === 200){
-										      	console.log("readyState = 200");
-										        const response = JSON.parse(xhr.responseText);
-										        uploadFile(file, response.signedRequest, response.url);
-										        console.log("uploadFile called");
-										      }
-										      else{
-										      	console.log("readyState != 200");
-										        // alert('Could not get signed URL.');
-										      }
-										    }
-										  };
-										  xhr.send();
-										  console.log("xhr sent...");
+										const optionsa = {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json'
+											},
+											query: {fileType: file.type}
+										};
+
+										try{
+											const respon = await fetch('/sign-s3', optionsa);	
+											const dir = await respon.json();
+											urls = dir.imageUrl;									
+												
+										}catch(TypeError){
+
+										}finally{
+											console.log(urls);
+											profileImage.src=urls;
+											profImg.src=urls;
 										}
+										// getSignedRequest(file);
+										// console.log("checking....");
 										
-										function uploadFile(file, signedRequest, url){
-											console.log("uploadingFile");
-										  const xhr = new XMLHttpRequest();
-										  xhr.open('PUT', signedRequest);
-										  xhr.onreadystatechange = () => {
-										  	console.log('this is the image: ',url);
-										  	ur=url;
-										  	profileImage.src=`${ur}`;
-											profImg.src=`${ur}`;
-										    if(xhr.readyState === 4){
+										// function getSignedRequest(file){
+										//   const xhr = new XMLHttpRequest();
+										//   xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+										//   console.log("/sign-s3 called");
+										//   xhr.onreadystatechange = () => {
+										//   	console.log("onreadystatechange called");
+										//     if(xhr.readyState === 4){
+										//     	console.log("readyState = 4");
+										//       if(xhr.status === 200){
+										//       	console.log("readyState = 200");
+										//         const response = JSON.parse(xhr.responseText);
+										//         uploadFile(file, response.signedRequest, response.url);
+										//         console.log("uploadFile called");
+										//       }
+										//       else{
+										//       	console.log("readyState != 200");
+										//         // alert('Could not get signed URL.');
+										//       }
+										//     }
+										//   };
+										//   xhr.send();
+										//   console.log("xhr sent...");
+										// }
+										
+										// function uploadFile(file, signedRequest, url){
+										// 	console.log("uploadingFile");
+										//   const xhr = new XMLHttpRequest();
+										//   xhr.open('PUT', signedRequest);
+										//   xhr.onreadystatechange = () => {
+										//   	console.log('this is the image: ',url);
+										//   	ur=url;
+										//   	profileImage.src=`${ur}`;
+										// 	profImg.src=`${ur}`;
+										//     if(xhr.readyState === 4){
 										    	
-										      if(xhr.status === 200){
+										//       if(xhr.status === 200){
 										        
-										        // document.getElementById('avatar-url').value = url;
-										      }
-										      else{
-										        // alert('Could not upload file.');
-										      }
-										    }
-										  };
-										  xhr.send(file);
+										//         // document.getElementById('avatar-url').value = url;
+										//       }
+										//       else{
+										//         // alert('Could not upload file.');
+										//       }
+										//     }
+										//   };
+										//   xhr.send(file);
 										  
-										}
+										// }
 										
 									}
 								},2000);
