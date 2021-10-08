@@ -473,7 +473,7 @@ async function inspectLoginDetails(){
 											profileImage.src=urls;
 											profImg.src=urls;
 										}
-										// getSignedRequest(file);
+										// sgetSignedRequest(file);
 										// console.log("checking....");
 										
 										// function getSignedRequest(file){
