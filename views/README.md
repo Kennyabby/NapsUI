@@ -1,3 +1,3 @@
 # NapsUI
 
-Creating a Naps responsive Page for National Association of Physics Students UI Division
+Creating a Naps Enterprise Resource Planning Page for National Association of Physics Students UI Division
